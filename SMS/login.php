@@ -103,11 +103,16 @@ session_start();
             text-transform: uppercase;
             font-weight: 600;
             letter-spacing: 0.5px;
-            transition: all 0.3s ease;
         }
 
         .login-button:hover {
             transform: translateY(-3px);
+            transition: all 0.3s ease;
+        }
+
+        .reg-button:hover{
+            transform: translateY(-3px);
+            transition: all 0.3s ease;
         }
 
         .fas {
@@ -128,10 +133,12 @@ session_start();
 
 <div id="particles-js"></div>
 
+<img src="pictures/ccs-logo.png" alt="Description of image">
+
 <div class="login-container">
     <div class="w3-card-4 login-card">
         <div class="login-header">
-            <h2><i class="fas fa-lock"></i>User Login</h2>
+            <h2><i class="fas fa-lock"></i>CCS Sit-in Monitoring System</h2>
         </div>
         <form class="login-form w3-container" method="POST" action="login.php">
             <label><i class="fas fa-user"></i> Username</label>
@@ -143,12 +150,17 @@ session_start();
             <button class="w3-button w3-block w3-margin-top login-button" type="submit">
                 <i class="fas fa-sign-in-alt"></i> Login
             </button>
+            <div class="reg-button w3-margin">
+            <a href="register.php" style="text-decoration: none" >No account? Click here to register</a>
+            </div>
         </form>
     </div>
     <footer style="text-align: center; padding: 20px; color: black;">
         <p>&copy; 2025 Patino, Rafael B. All rights reserved.</p>
     </footer>
 </div>
+
+<img src="pictures/uc-logo.png" alt="Description of image" width="220" height="200">
 
 <script src="particles.js-master\particles.min.js"></script>
 <script>

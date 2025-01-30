@@ -131,7 +131,7 @@ session_start();
 <div class="login-container">
     <div class="w3-card-4 login-card">
         <div class="login-header">
-            <h2><i class="fas fa-lock"></i>Login</h2>
+            <h2><i class="fas fa-lock"></i>User Login</h2>
         </div>
         <form class="login-form w3-container" method="POST" action="login.php">
             <label><i class="fas fa-user"></i> Username</label>

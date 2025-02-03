@@ -13,7 +13,7 @@ session_start();
     <link rel="stylesheet" href="css/all.css">
     <style>
         :root {
-            --primary-gradient: linear-gradient(135deg, #005C97 0%, #363795 100%);
+            --primary-gradient: linear-gradient(135deg, #D29C00 0%, #5E3B73 100%);
             --secondary-gradient: linear-gradient(135deg, #ff6a88 0%, #ff9a8b 100%);
             --neutral-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             --shadow-elegant: 0 10px 20px rgba(0,0,0,0.1), 0 6px 6px rgba(0,0,0,0.05);
@@ -36,14 +36,14 @@ session_start();
             overflow: hidden;
         }
 
-        .login-container {
+        .register-container {
             width: 100%;
             max-width: 500px;
             position: relative;
             z-index: 2;
         }
 
-        .login-card {
+        .register-card {
             background: #f5f7fa;
             border-radius: 16px;
             box-shadow: var(--shadow-elegant);
@@ -51,21 +51,21 @@ session_start();
             margin-bottom: 20px;
         }
 
-        .login-header {
+        .register-header {
             background: var(--primary-gradient);
             color: #f5f7fa;
             text-align: center;
-            padding: 15px;
+            padding: 20px;
         }
 
-        .login-header h2 {
+        .register-header h2 {
             margin: 0;
             font-weight: 600;
             letter-spacing: 0.5px;
             font-size: 1.5rem;
         }
 
-        .login-form {
+        .register-form {
             padding: 20px;
             background: #f5f7fa;
             max-height: 70vh;
@@ -164,12 +164,12 @@ session_start();
 
 <div id="particles-js"></div>
 <img src="pictures/ccs-logo.png" alt="Description of image">
-<div class="login-container w3-margin">
-    <div class="login-card">
-        <div class="login-header">
-            <h2><i class="fas fa-lock"></i>Registration</h2>
+<div class="register-container w3-margin">
+    <div class="register-card">
+        <div class="register-header">
+            <h2><i class="fa fa-address-card"></i>Registration</h2>
         </div>
-        <form class="login-form" method="POST" action="login.php">
+        <form class="register-form" method="POST" action="login.php">
                 <label><i class="fas fa-id-card"></i> IDNO</label>
                 <input class="w3-input w3-border" type="text" name="idno" required>
 

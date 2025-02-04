@@ -31,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['loggedin'] = true;
 
                 // Redirect to dashboard or homepage
-                header("Location: dashboard.php");
+                header("Location: homepage.php");
                 exit();
             } else {
                 echo "
@@ -69,7 +69,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         :root {
             --primary-gradient: linear-gradient(135deg, #D29C00 0%, #5E3B73 100%);
             --secondary-gradient: linear-gradient(135deg, #ff6a88 0%, #ff9a8b 100%);
-            --neutral-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             --shadow-elegant: 0 10px 20px rgba(0,0,0,0.1), 0 6px 6px rgba(0,0,0,0.05);
         }
 
@@ -77,10 +76,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             font-family: 'Inter';
             src: url('fonts/Inter_18pt-Regular.ttf');
         }
-        
+
+        #globe {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            bottom: 0;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
-            background: var(--neutral-gradient);
             margin: 0;
             padding: 0;
             display: flex;
@@ -93,7 +100,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         .login-container {
             width: 100%;
             max-width: 400px;
-            padding: 20px;
             position: relative;
             z-index: 2;
         }
@@ -172,22 +178,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         .fas {
             margin-right: 10px;
         }
-
-        #particles-js {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-        }
     </style>
 </head>
 <body>
 
-<div id="particles-js"></div>
+<div id="globe"></div>
 
-<img src="pictures/ccs-logo.png" alt="Description of image">
+<img src="pictures/ccs-logo.png" style="z-index: 2;" alt="Description of image">
 
 <div class="login-container">
     <div class="w3-card-4 login-card">
@@ -209,126 +206,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </form>
     </div>
-    <footer style="text-align: center; padding: 20px; color: black;">
+    <footer style="text-align: center; padding: 20px; color: #f4f4f4;">
         <p>&copy; 2025 Patino, Rafael B. All rights reserved.</p>
     </footer>
 </div>
 
-<img src="pictures/uc-logo.png" alt="Description of image" width="220" height="200">
+<img src="pictures/uc-logo.png" style="z-index: 2;" alt="Description of image" width="220" height="200">
+</body>
 
-<script src="particles.js-master\particles.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.globe.min.js"></script>
+
 <script>
-    particlesJS("particles-js", {
-        "particles": {
-            "number": {
-                "value": 80,
-                "density": {
-                    "enable": true,
-                    "value_area": 800
-                }
-            },
-            "color": {
-                "value": "#005C97"
-            },
-            "shape": {
-                "type": "circle",
-                "stroke": {
-                    "width": 0,
-                    "color": "#000000"
-                },
-                "polygon": {
-                    "nb_sides": 5
-                },
-                "image": {
-                    "src": "img/github.svg",
-                    "width": 100,
-                    "height": 100
-                }
-            },
-            "opacity": {
-                "value": 1,
-                "random": false,
-                "anim": {
-                    "enable": false,
-                    "speed": 1,
-                    "opacity_min": 0.1,
-                    "sync": false
-                }
-            },
-            "size": {
-                "value": 10,
-                "random": true,
-                "anim": {
-                    "enable": false,
-                    "speed": 40,
-                    "size_min": 0.1,
-                    "sync": false
-                }
-            },
-            "line_linked": {
-                "enable": true,
-                "distance": 150,
-                "color": "#667eea",
-                "opacity": 0.4,
-                "width": 1
-            },
-            "move": {
-                "enable": true,
-                "speed": 6,
-                "direction": "none",
-                "random": false,
-                "straight": false,
-                "out_mode": "out",
-                "bounce": false,
-                "attract": {
-                    "enable": false,
-                    "rotateX": 600,
-                    "rotateY": 1200
-                }
-            }
-        },
-        "interactivity": {
-            "detect_on": "canvas",
-            "events": {
-                "onhover": {
-                    "enable": true,
-                    "mode": "repulse"
-                },
-                "onclick": {
-                    "enable": true,
-                    "mode": "push"
-                },
-                "resize": true
-            },
-            "modes": {
-                "grab": {
-                    "distance": 400,
-                    "line_linked": {
-                        "opacity": 1
-                    }
-                },
-                "bubble": {
-                    "distance": 400,
-                    "size": 40,
-                    "duration": 2,
-                    "opacity": 8,
-                    "speed": 3
-                },
-                "repulse": {
-                    "distance": 200,
-                    "duration": 0.4
-                },
-                "push": {
-                    "particles_nb": 4
-                },
-                "remove": {
-                    "particles_nb": 2
-                }
-            }
-        },
-        "retina_detect": true
+    window.addEventListener('DOMContentLoaded', () => {
+        VANTA.GLOBE({
+        el: "#globe",
+        mouseControls: true,
+        touchControls: true,
+        gyroControls: false,
+        minHeight: 200.00,
+        minWidth: 200.00,
+        scale: 1.00,
+        scaleMobile: 1.00,
+        color: 0xD29C00,
+        backgroundColor: 0x0e2f60
+        })
     });
 </script>
-
-</body>
 </html>

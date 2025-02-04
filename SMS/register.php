@@ -240,8 +240,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <input class="w3-input w3-border" type="text" name="username" required>
 
                 <label><i class="fas fa-key"></i> Password</label>
-                <input class="w3-input w3-border" type="password" name="password" required>
-
+                <input class="w3-input w3-border" type="password" name="password" id="password" required>
+                <label><i class="fas fa-key"></i> Confirm Password</label>
+                <input class="w3-input w3-border" type="password" name="confirm_password" id="confirm_password" required>
+                
                 <button class="w3-button w3-block reg-button" type="submit">
                     <i class="fas fa-sign-in-alt"></i> Register
                 </button>
@@ -256,6 +258,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </div>
 
 <img src="pictures/uc-logo.png" alt="Description of image" width="220" height="200">
+
+<script>
+    document.querySelector("form").addEventListener("submit", function(event) {
+        var password = document.getElementById("password").value;
+        var confirmPassword = document.getElementById("confirm_password").value;
+
+        if (password !== confirmPassword) {
+            alert("Passwords do not match! Please try again.");
+            event.preventDefault(); // Prevent form submission
+        }
+    });
+</script>
 
 <script src="particles.js-master\particles.min.js"></script>
 <script>

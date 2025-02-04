@@ -1,5 +1,43 @@
 <?php
 session_start();
+include('conn/db.php'); 
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Sanitize input
+    $idno = trim($_POST['idno']);
+    $lastname = trim($_POST['lastname']);
+    $firstname = trim($_POST['firstname']);
+    $midname = trim($_POST['midname']) ?: NULL;
+    $course = $_POST['course'];
+    $year_level = $_POST['year-level'];
+    $username = trim($_POST['username']);
+    $password = $_POST['password'];
+
+    // Hash password for security
+    $password_hash = password_hash($password, PASSWORD_DEFAULT);
+
+    // Database insert query
+    $sql = "INSERT INTO users (idno, lastname, firstname, midname, course, year_level, username, password_hash) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+    if ($stmt = $conn->prepare($sql)) {
+        $stmt->bind_param("ssssssss", $idno, $lastname, $firstname, $midname, $course, $year_level, $username, $password_hash);
+
+        if ($stmt->execute()) {
+            echo "<script>
+                    alert('Registration successful! You can now log in.');
+                    window.location.href = 'login.php'; // Redirect to login page
+                  </script>";
+        } else {
+            echo "<script>alert('Error: Unable to register.');</script>";
+        }
+        $stmt->close();
+    } else {
+        echo "Error preparing statement: " . $conn->error;
+    }
+
+    $conn->close();
+}
 ?>
 
 
@@ -169,7 +207,7 @@ session_start();
         <div class="register-header">
             <h2><i class="fa fa-address-card"></i>Registration</h2>
         </div>
-        <form class="register-form" method="POST" action="login.php">
+        <form class="register-form" method="POST" action="register.php">
                 <label><i class="fas fa-id-card"></i> IDNO</label>
                 <input class="w3-input w3-border" type="text" name="idno" required>
 

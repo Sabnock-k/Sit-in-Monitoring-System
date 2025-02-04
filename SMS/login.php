@@ -1,7 +1,61 @@
 <?php
 session_start();
-?>
+include('conn/db.php'); 
 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = trim($_POST['username']);
+    $password = $_POST['password'];
+
+    // Prepare query to fetch user details
+    $sql = "SELECT id, idno, firstname, lastname, course, year_level, password_hash FROM users WHERE username = ?";
+
+    if ($stmt = $conn->prepare($sql)) {
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $stmt->store_result();
+
+        // Check if user exists
+        if ($stmt->num_rows == 1) {
+            $stmt->bind_result($id, $idno, $firstname, $lastname, $course, $year_level, $password_hash);
+            $stmt->fetch();
+
+            // Verify password
+            if (password_verify($password, $password_hash)) {
+                // Store user details in session
+                $_SESSION['user_id'] = $id;
+                $_SESSION['idno'] = $idno;
+                $_SESSION['firstname'] = $firstname;
+                $_SESSION['lastname'] = $lastname;
+                $_SESSION['course'] = $course;
+                $_SESSION['year_level'] = $year_level;
+                $_SESSION['loggedin'] = true;
+
+                // Redirect to dashboard or homepage
+                header("Location: dashboard.php");
+                exit();
+            } else {
+                echo "
+                <script> 
+                    alert('Invalid Password!');
+                </script>
+                ";  
+            }
+        } else {
+            echo "
+                <script> 
+                    alert('No user found, Try again!');
+                </script>
+                ";  
+        }
+
+        $stmt->close();
+    } else {
+        echo "Error preparing statement: " . $conn->error;
+    }
+
+    $conn->close();
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">

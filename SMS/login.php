@@ -72,11 +72,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             --shadow-elegant: 0 10px 20px rgba(0,0,0,0.1), 0 6px 6px rgba(0,0,0,0.05);
         }
 
-        @font-face {
-            font-family: 'Inter';
-            src: url('fonts/Inter_18pt-Regular.ttf');
-        }
-
         #globe {
             position: absolute;
             width: 100%;

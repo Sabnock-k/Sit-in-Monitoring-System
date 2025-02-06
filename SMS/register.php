@@ -52,11 +52,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             --secondary-gradient: linear-gradient(135deg, #ff6a88 0%, #ff9a8b 100%);
             --shadow-elegant: 0 10px 20px rgba(0,0,0,0.1), 0 6px 6px rgba(0,0,0,0.05);
         }
-
-        @font-face {
-            font-family: 'Inter';
-            src: url('fonts/Inter_18pt-Regular.ttf');
-        }
         
         #globe {
             position: absolute;
@@ -193,39 +188,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             background-color: #555;
         }
 
-        /* Modal styles */
-        .modal {
-        display: none; /* Hidden by default */
-        position: fixed;
-        z-index: 3;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.4); /* Background color with transparency */
-        }
-
-        .modal-content {
-        background-color: white;
-        margin: 15% auto;
-        padding: 20px;
-        border-radius: 5px;
-        width: 50%;
-        }
-
-        .close-btn {
-        color: #aaa;
-        font-size: 28px;
-        font-weight: bold;
-        cursor: pointer;
-        }
-
-        .close-btn:hover,
-        .close-btn:focus {
-        color: black;
-        text-decoration: none;
-        }
-
     </style>
 </head>
 <body>
@@ -286,16 +248,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <footer style="text-align: center; padding: 20px; color: #f4f4f4;">
         <p>&copy; 2025 Patino, Rafael B. All rights reserved.</p>
     </footer>
+</div>
 
-    <!-- Success modal -->
-    <div id="successModal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" id="closeBtn">&times;</span>
-            <h2>Registration Successful!</h2>
-            <p>Please login to continue.</p>
-        </div>
+<div id="successPopup" class="popup">
+    <div class="popup-content">
+        <span class="close">&times;</span>
+        <p>🎉 Registration successful! Welcome, <span id="welcomeUsername"></span>!</p>
     </div>
-
 </div>
 
 <img src="pictures/uc-logo.png" style="z-index: 2;" alt="Description of image" width="220" height="200">
@@ -309,19 +268,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (password !== confirmPassword) {
             alert("Passwords do not match! Please try again.");
             event.preventDefault(); // Prevent form submission
-        }else{
-            const isRegistrationSuccessful = true;
-
-            if (isRegistrationSuccessful) {
-                document.getElementById('successModal').style.display = 'block';
-            }
         }
-    });
-
-    // Close modal when clicking the close button
-    document.getElementById("closeBtn").addEventListener("click", function () {
-        document.getElementById("successModal").style.display = "none";
-        window.location.href = 'login.php';
     });
 </script>
 

@@ -24,7 +24,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bind_param("ssssssss", $idno, $lastname, $firstname, $midname, $course, $year_level, $username, $password_hash);
 
         if ($stmt->execute()) {
-            
+            // Set session variable for successful registration
+            $_SESSION['registration_success'] = true;
+            $_SESSION['registered_username'] = $username;
         } else {
             echo "<script>alert('Error: Unable to register.');</script>";
         }
@@ -36,7 +38,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conn->close();
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -188,6 +189,46 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             background-color: #555;
         }
 
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .popup-content {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .close {
+            color: #f4f4f4;
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -269,6 +310,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             alert("Passwords do not match! Please try again.");
             event.preventDefault(); // Prevent form submission
         }
+    });
+
+    // Show popup if registration was successful
+    window.onload = function() {
+        <?php if (isset($_SESSION['registration_success']) && $_SESSION['registration_success']): ?>
+            document.getElementById('welcomeUsername').textContent = "<?php echo $_SESSION['registered_username']; ?>";
+            document.getElementById('successPopup').style.display = 'flex';
+            <?php unset($_SESSION['registration_success']); ?>
+        <?php endif; ?>
+    };
+
+    // Close popup when the close button is clicked
+    document.querySelector('.close').addEventListener('click', function() {
+        document.getElementById('successPopup').style.display = 'none';
     });
 </script>
 

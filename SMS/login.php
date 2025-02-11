@@ -1,6 +1,7 @@
 <?php
 session_start();
 include('conn/db.php'); 
+$error = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = trim($_POST['username']);
@@ -34,20 +35,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 header("Location: homepage.php");
                 exit();
             } else {
-                echo "
-                <script> 
-                    alert('Invalid Password!');
-                </script>
-                ";  
+                $error = "Invalid username or password!"; 
             }
         } else {
-            echo "
-                <script> 
-                    alert('No user found, Try again!');
-                </script>
-                ";  
+            $error = "No user found! Try again!";  
         }
-
         $stmt->close();
     } else {
         echo "Error preparing statement: " . $conn->error;
@@ -143,13 +135,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             color: #2c3e50;
         }
 
-        .error-message {
-            color: #f44336;
-            text-align: center;
-            margin-bottom: 20px;
-            font-weight: 600;
-        }
-
         .login-button {
             background: var(--primary-gradient);
             color: #f5f7fa;
@@ -158,74 +143,112 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             text-transform: uppercase;
             font-weight: 600;
             letter-spacing: 0.5px;
+            transition: all 0.5s ease;
         }
 
         .login-button:hover {
             transform: translateY(-3px);
-            transition: all 0.3s ease;
+            transition: all 0.5s ease;
         }
 
+        .reg-button{
+            transition: all 0.5s ease;
+        }
+        
         .reg-button:hover{
             transform: translateY(-3px);
-            transition: all 0.3s ease;
+            transition: all 0.5s ease;
         }
 
         .fas {
             margin-right: 10px;
         }
+
+        .error{
+            color: #E52020;
+            display: flex;
+            justify-content: center;
+        }
+
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+        @keyframes shake {
+            0% { transform: translate(0, 0) rotate(0deg); }
+                0% { transform: translateX(0); }
+                10% { transform: translateX(-10px); }
+                20% { transform: translateX(15px); }
+                30% { transform: translateX(-20px); }
+                40% { transform: translateX(10px); }
+                50% { transform: translateX(-15px); }
+                60% { transform: translateX(20px); }
+                70% { transform: translateX(-10px); }
+                80% { transform: translateX(15px); }
+                90% { transform: translateX(-5px); }
+                100% { transform: translateX(0); }
+        }
     </style>
+
+    <script>
+        function triggerShake() {
+            var form = document.getElementById("login-form");
+            form.classList.add("shake");
+            setTimeout(() => form.classList.remove("shake"), 300);
+        }
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.globe.min.js"></script>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            VANTA.GLOBE({
+            el: "#globe",
+            mouseControls: true,
+            touchControls: true,
+            gyroControls: false,
+            minHeight: 200.00,
+            minWidth: 200.00,
+            scale: 1.00,
+            scaleMobile: 1.00,
+            color: 0xD29C00,
+            backgroundColor: 0x0e2f60
+            })
+        });
+    </script>
 </head>
 <body>
-
-<div id="globe"></div>
-
-<img src="pictures/ccs-logo.png" style="z-index: 2;" alt="Description of image">
-
-<div class="login-container">
-    <div class="w3-card-4 login-card">
-        <div class="login-header">
-            <h2><i class="fas fa-chair"></i>CCS Sit-in Monitoring System</h2>
-        </div>
-        <form class="login-form w3-container" method="POST" action="login.php">
-            <label><i class="fas fa-user"></i> Username</label>
-            <input class="w3-input w3-border" type="text" name="username" required>
-            
-            <label><i class="fas fa-key"></i> Password</label>
-            <input class="w3-input w3-border" type="password" name="password" required>
-            
-            <button class="w3-button w3-block w3-margin-top login-button" type="submit">
-                <i class="fas fa-sign-in-alt"></i> Login
-            </button>
-            <div class="reg-button w3-margin">
-            <a href="register.php" style="text-decoration: none" >No account? Click here to register</a>
+    <div id="globe"></div>
+    <img src="pictures/ccs-logo.png" style="z-index: 2; margin: 16px;" alt="Description of image">
+    <div class="login-container">
+        <div class="w3-card-4 login-card" id="login-form">
+            <div class="login-header">
+                <h2><i class="fas fa-chair"></i>CCS Sit-in Monitoring System</h2>
             </div>
-        </form>
+            <form class="login-form w3-container" method="POST" action="login.php">
+                <?php if ($error): ?>
+                    <p class="error"><?php echo $error; ?></p>
+                    <script>triggerShake();</script>
+                <?php endif; ?>
+
+                <label><i class="fas fa-user"></i> Username</label>
+                <input class="w3-input w3-border" type="text" name="username" required>
+                
+                <label><i class="fas fa-key"></i> Password</label>
+                <input class="w3-input w3-border" type="password" name="password" required>
+                
+                <button class="w3-button w3-block w3-margin-top login-button" type="submit">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+                <div class="reg-button w3-margin">
+                <a href="register.php" style="text-decoration: none" >No account? Click here to register</a>
+                </div>
+            </form>
+        </div>
+        <footer style="text-align: center; margin: 10px; color: #f4f4f4;">
+            <p>&copy; 2025 Patino, Rafael B. All rights reserved.</p>
+        </footer>
     </div>
-    <footer style="text-align: center; padding: 20px; color: #f4f4f4;">
-        <p>&copy; 2025 Patino, Rafael B. All rights reserved.</p>
-    </footer>
-</div>
-
-<img src="pictures/uc-logo.png" style="z-index: 2;" alt="Description of image" width="220" height="200">
+    <img src="pictures/uc-logo.png" style="z-index: 2; margin: 16px;" alt="Description of image" width="220" height="200">
 </body>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.globe.min.js"></script>
-
-<script>
-    window.addEventListener('DOMContentLoaded', () => {
-        VANTA.GLOBE({
-        el: "#globe",
-        mouseControls: true,
-        touchControls: true,
-        gyroControls: false,
-        minHeight: 200.00,
-        minWidth: 200.00,
-        scale: 1.00,
-        scaleMobile: 1.00,
-        color: 0xD29C00,
-        backgroundColor: 0x0e2f60
-        })
-    });
-</script>
 </html>

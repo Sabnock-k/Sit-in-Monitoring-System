@@ -1,7 +1,7 @@
 <?php
 session_start();
 include('conn/db.php'); 
-
+$error = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Sanitize input
     $idno = trim($_POST['idno']);
@@ -12,27 +12,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $year_level = $_POST['year-level'];
     $username = trim($_POST['username']);
     $password = $_POST['password'];
+    $confirm_password = $_POST["confirm_password"];
 
-    // Hash password for security
-    $password_hash = password_hash($password, PASSWORD_DEFAULT);
+    if($password !== $confirm_password){
+        $error = "Password Doesn't Match!";
+        echo "<script>triggerShake();</script>";
+    }else{
+        // Hash password for security
+        $password_hash = password_hash($password, PASSWORD_DEFAULT);
 
-    // Database insert query
-    $sql = "INSERT INTO users (idno, lastname, firstname, midname, course, year_level, username, password_hash) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        // Database insert query
+        $sql = "INSERT INTO users (idno, lastname, firstname, midname, course, year_level, username, password_hash) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
-    if ($stmt = $conn->prepare($sql)) {
-        $stmt->bind_param("ssssssss", $idno, $lastname, $firstname, $midname, $course, $year_level, $username, $password_hash);
+        if ($stmt = $conn->prepare($sql)) {
+            $stmt->bind_param("ssssssss", $idno, $lastname, $firstname, $midname, $course, $year_level, $username, $password_hash);
 
-        if ($stmt->execute()) {
-            // Set session variable for successful registration
-            $_SESSION['registration_success'] = true;
-            $_SESSION['registered_username'] = $username;
+            if ($stmt->execute()) {
+                echo "<script>alert('Registration successful!'); window.location.href='login.php';</script>";
+            } else {
+                echo "Error executing query: " . $stmt->error;
+            }
+
+            $stmt->close();
         } else {
-            echo "<script>alert('Error: Unable to register.');</script>";
+            echo "Error preparing statement: " . $conn->error;
         }
-        $stmt->close();
-    } else {
-        echo "Error preparing statement: " . $conn->error;
     }
 
     $conn->close();
@@ -47,6 +52,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Register Portal</title>
     <link rel="stylesheet" href="css/w3.css">
     <link rel="stylesheet" href="css/all.css">
+    <script src="scripts/register-script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.globe.min.js"></script>
     <style>
         :root {
             --primary-gradient: linear-gradient(135deg, #D29C00 0%, #5E3B73 100%);
@@ -77,7 +85,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         .register-container {
             width: 100%;
             max-width: 500px;
-            position: relative;
             z-index: 2;
         }
 
@@ -100,7 +107,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             margin: 0;
             font-weight: 600;
             letter-spacing: 0.5px;
-            font-size: 1.5rem;
         }
 
         .register-form {
@@ -140,18 +146,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             text-transform: uppercase;
             font-weight: 600;
             letter-spacing: 0.5px;
-            transition: all 0.3s ease;
             margin-top: 15px;
+            transition: all 0.5s ease;
         }
 
         .reg-button:hover {
             transform: translateY(-2px);
-            opacity: 0.9;
+            transition: all 0.5s ease;
         }
-
+        .login-button{
+            transition: all 0.5s ease;
+        }
         .login-button:hover{
             transform: translateY(-2px);
-            transition: all 0.3s ease;
+            transition: all 0.5s ease;
         }
 
         .fas {
@@ -189,162 +197,97 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             background-color: #555;
         }
 
-        .popup {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+        .error{
+            margin-bottom:0px;
+            color: #f1f1f1;
+            display:flex;
             justify-content: center;
-            align-items: center;
-            z-index: 1000;
         }
 
-        .popup-content {
-            background: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            animation: slideIn 0.5s ease-out;
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        @keyframes shake {
+            0% { transform: translate(0, 0) rotate(0deg); }
+                0% { transform: translateX(0); }
+                10% { transform: translateX(-10px); }
+                20% { transform: translateX(15px); }
+                30% { transform: translateX(-20px); }
+                40% { transform: translateX(10px); }
+                50% { transform: translateX(-15px); }
+                60% { transform: translateX(20px); }
+                70% { transform: translateX(-10px); }
+                80% { transform: translateX(15px); }
+                90% { transform: translateX(-5px); }
+                100% { transform: translateX(0); }
         }
 
-        @keyframes slideIn {
-            from {
-                transform: translateY(-50px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        .close {
-            color: #f4f4f4;
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 24px;
-            cursor: pointer;
-        }
     </style>
+    
 </head>
 <body>
+    <div id="globe"></div>
+    <img src="pictures/ccs-logo.png" style="z-index: 2; margin: 16px;" alt="Description of image">
+    <div class="register-container">
+        <div class="register-card" id="register-form">
+            <div class="register-header">
+                <h2><i class="fa fa-address-card"></i> Registration</h2>
+                <?php if ($error): ?>
+                    <p class="error"><?php echo $error; ?></p>
+                    <script>triggerShake();</script>
+                <?php endif; ?>
+            </div>
+            <form class="register-form" method="POST" action="register.php">
+                    <label><i class="fas fa-id-card"></i> IDNO</label>
+                    <input class="w3-input w3-border" type="text" name="idno" required>
 
-<div id="globe"></div>
+                    <label><i class="fas fa-user"></i> Lastname</label>
+                    <input class="w3-input w3-border" type="text" name="lastname" required>
 
-<img src="pictures/ccs-logo.png" style="z-index: 2;" alt="Description of image">
-<div class="register-container">
-    <div class="register-card">
-        <div class="register-header">
-            <h2><i class="fa fa-address-card"></i> Registration</h2>
+                    <label><i class="fas fa-user"></i> Firstname</label>
+                    <input class="w3-input w3-border" type="text" name="firstname" required>
+
+                    <label><i class="fas fa-user"></i> Midname</label>
+                    <input class="w3-input w3-border" type="text" name="midname" placeholder="(optional)">
+
+                    <label><i class="fas fa-user"></i> Course</label>
+                    <select class="w3-input w3-border" name="course" required>
+                        <option value="" disabled selected>-- Select Course --</option>
+                        <option value="computer-science">Computer Science</option>
+                        <option value="information-technology">Information Technology</option>
+                    </select>
+
+                    <label><i class="fas fa-user"></i> Year Level</label>
+                    <select class="w3-input w3-border" name="year-level" required>
+                        <option value="" disabled selected>-- Select Year Level --</option>
+                        <option value="first-year">1</option>
+                        <option value="second-year">2</option>
+                        <option value="third-year">3</option>
+                        <option value="fourth-year">4</option>
+                    </select>
+
+                    <label><i class="fas fa-user"></i> Username</label>
+                    <input class="w3-input w3-border" type="text" name="username" required>
+
+                    <label><i class="fas fa-key"></i> Password</label>
+                    <input class="w3-input w3-border" type="password" name="password" required>
+                    <label><i class="fas fa-key"></i> Confirm Password</label>
+                    <input class="w3-input w3-border" type="password" name="confirm_password" required>
+                    
+                    <button class="w3-button w3-block reg-button" type="submit">
+                        <i class="fas fa-sign-in-alt"></i> Register
+                    </button>
+            </form>
+            <div class="login-button w3-margin ">
+                <a href="login.php" style="text-decoration: none" >Already have an Account? Click here to Login</a>
+            </div>
         </div>
-        <form class="register-form" method="POST" action="register.php">
-                <label><i class="fas fa-id-card"></i> IDNO</label>
-                <input class="w3-input w3-border" type="text" name="idno" required>
-
-                <label><i class="fas fa-user"></i> Lastname</label>
-                <input class="w3-input w3-border" type="text" name="lastname" required>
-
-                <label><i class="fas fa-user"></i> Firstname</label>
-                <input class="w3-input w3-border" type="text" name="firstname" required>
-
-                <label><i class="fas fa-user"></i> Midname</label>
-                <input class="w3-input w3-border" type="text" name="midname" placeholder="(optional)">
-
-                <label><i class="fas fa-user"></i> Course</label>
-                <select class="w3-input w3-border" name="course" required>
-                    <option value="" disabled selected>-- Select Course --</option>
-                    <option value="computer-science">Computer Science</option>
-                    <option value="information-technology">Information Technology</option>
-                </select>
-
-                <label><i class="fas fa-user"></i> Year Level</label>
-                <select class="w3-input w3-border" name="year-level" required>
-                    <option value="" disabled selected>-- Select Year Level --</option>
-                    <option value="first-year">1</option>
-                    <option value="second-year">2</option>
-                    <option value="third-year">3</option>
-                    <option value="fourth-year">4</option>
-                </select>
-
-                <label><i class="fas fa-user"></i> Username</label>
-                <input class="w3-input w3-border" type="text" name="username" required>
-
-                <label><i class="fas fa-key"></i> Password</label>
-                <input class="w3-input w3-border" type="password" name="password" id="password" required>
-                <label><i class="fas fa-key"></i> Confirm Password</label>
-                <input class="w3-input w3-border" type="password" name="confirm_password" id="confirm_password" required>
-                
-                <button class="w3-button w3-block reg-button" type="submit">
-                    <i class="fas fa-sign-in-alt"></i> Register
-                </button>
-        </form>
-        <div class="login-button w3-margin ">
-            <a href="login.php" style="text-decoration: none" >Already have an Account? Click here to Login</a>
-        </div>
+        <footer style="text-align: center; padding: 20px; color: #f4f4f4;">
+            <p>&copy; 2025 Patino, Rafael B. All rights reserved.</p>
+        </footer>
     </div>
-    <footer style="text-align: center; padding: 20px; color: #f4f4f4;">
-        <p>&copy; 2025 Patino, Rafael B. All rights reserved.</p>
-    </footer>
-</div>
 
-<div id="successPopup" class="popup">
-    <div class="popup-content">
-        <span class="close">&times;</span>
-        <p>🎉 Registration successful! Welcome, <span id="welcomeUsername"></span>!</p>
-    </div>
-</div>
-
-<img src="pictures/uc-logo.png" style="z-index: 2;" alt="Description of image" width="220" height="200">
+    <img src="pictures/uc-logo.png" style="z-index: 2; margin: 16px;" alt="Description of image" width="220" height="200">
 </body>
-
-<script>
-    document.querySelector("form").addEventListener("submit", function(event) {
-        var password = document.getElementById("password").value;
-        var confirmPassword = document.getElementById("confirm_password").value;
-
-        if (password !== confirmPassword) {
-            alert("Passwords do not match! Please try again.");
-            event.preventDefault(); // Prevent form submission
-        }
-    });
-
-    // Show popup if registration was successful
-    window.onload = function() {
-        <?php if (isset($_SESSION['registration_success']) && $_SESSION['registration_success']): ?>
-            document.getElementById('welcomeUsername').textContent = "<?php echo $_SESSION['registered_username']; ?>";
-            document.getElementById('successPopup').style.display = 'flex';
-            <?php unset($_SESSION['registration_success']); ?>
-        <?php endif; ?>
-    };
-
-    // Close popup when the close button is clicked
-    document.querySelector('.close').addEventListener('click', function() {
-        document.getElementById('successPopup').style.display = 'none';
-    });
-</script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.globe.min.js"></script>
-
-<script>
-    window.addEventListener('DOMContentLoaded', () => {
-        VANTA.GLOBE({
-        el: "#globe",
-        mouseControls: true,
-        touchControls: true,
-        gyroControls: false,
-        minHeight: 200.00,
-        minWidth: 200.00,
-        scale: 1.00,
-        scaleMobile: 1.00,
-        color: 0xD29C00,
-        backgroundColor: 0x0e2f60
-        })
-    });
-</script>
-
 </html>

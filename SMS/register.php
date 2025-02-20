@@ -201,7 +201,65 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             display:flex;
             justify-content: center;
         }
+        
+        .success-modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
 
+        .modal-content {
+            background-color: #fff;
+            margin: 15% auto;
+            max-width: 400px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {transform: translateY(-100px); opacity: 0;}
+            to {transform: translateY(0); opacity: 1;}
+        }
+
+        .success-icon {
+            text-align: center;
+            padding: 20px;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .modal-body {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .modal-footer {
+            padding: 15px;
+            text-align: center;
+            background-color: #f8f9fa;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .green-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .green-btn:hover {
+            background-color: #45a049;
+        }
         .shake {
             animation: shake 0.5s ease-in-out;
         }
@@ -292,6 +350,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <footer style="text-align: center; padding: 20px; color: #f4f4f4;">
             <p>&copy; 2025 Patino, Rafael B. All rights reserved.</p>
         </footer>
+    </div>
+
+    <div id="successModal" class="success-modal">
+        <div class="modal-content w3-animate-top">
+            <div class="success-icon">
+                <i class="w3-xxxlarge">✔</i>
+            </div>
+            <div class="modal-body">
+                <h3 class="w3-text-dark-grey">Registration Successful!</h3>
+                <p class="w3-text-grey">Your account has been created successfully.</p>
+                <p class="w3-text-grey w3-small">Please check your email for verification.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="green-btn" onclick="closeModal()">Continue</button>
+            </div>
+        </div>
     </div>
 
     <img src="pictures/uc-logo.png" style="z-index: 2; margin: 16px;" alt="Description of image" width="220" height="200">

@@ -1,9 +1,3 @@
-function triggerShake() {
-    var form = document.getElementById("register-form");
-    form.classList.add("shake");
-    setTimeout(() => form.classList.remove("shake"), 300);
-}
-
 window.addEventListener('DOMContentLoaded', () => {
     VANTA.GLOBE({
     el: "#globe",
@@ -18,3 +12,14 @@ window.addEventListener('DOMContentLoaded', () => {
     backgroundColor: 0x0e2f60
     })
 });
+
+function triggerShake() {
+    var form = document.getElementById("register-form-card");
+    if (form) {
+        form.classList.add("shake");
+        setTimeout(() => form.classList.remove("shake"), 300);
+    } else {
+        console.error("Element not found: #register-form-card");
+    }
+}
+

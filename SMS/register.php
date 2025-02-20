@@ -14,9 +14,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
     $confirm_password = $_POST["confirm_password"];
 
-    if($password !== $confirm_password){
-        $error = "Password Doesn't Match!";
-        echo "<script>triggerShake();</script>";
+    if ($password !== $confirm_password) {
+        $error = "Passwords doesn't match!";
     }else{
         // Hash password for security
         $password_hash = password_hash($password, PASSWORD_DEFAULT);
@@ -39,7 +38,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "Error preparing statement: " . $conn->error;
         }
     }
-
     $conn->close();
 }
 ?>
@@ -197,7 +195,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             background-color: #555;
         }
 
-        .error{
+        #error-message{
             margin-bottom:0px;
             color: #f1f1f1;
             display:flex;
@@ -224,21 +222,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
     </style>
-    
 </head>
 <body>
     <div id="globe"></div>
     <img src="pictures/ccs-logo.png" style="z-index: 2; margin: 16px;" alt="Description of image">
     <div class="register-container">
-        <div class="register-card" id="register-form">
+        <div class="register-card" id="register-form-card">
             <div class="register-header">
                 <h2><i class="fa fa-address-card"></i> Registration</h2>
                 <?php if ($error): ?>
-                    <p class="error"><?php echo $error; ?></p>
-                    <script>triggerShake();</script>
+                    <h3 id="error-message"><?php echo $error; ?></h3>
+                    <script>
+                        setTimeout(function() {
+                            document.getElementById('error-message').style.transition = 'opacity 1s ease-out';
+                            document.getElementById('error-message').style.opacity = '0';
+                            setTimeout(function() {
+                                document.getElementById('error-message').style.display = 'none';
+                            }, 1000);
+                        }, 3000);
+                        triggerShake();
+                    </script>
                 <?php endif; ?>
             </div>
-            <form class="register-form" method="POST" action="register.php">
+            <form class="register-form" action="register.php" method="POST">
                     <label><i class="fas fa-id-card"></i> IDNO</label>
                     <input class="w3-input w3-border" type="text" name="idno" required>
 
@@ -271,9 +277,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <input class="w3-input w3-border" type="text" name="username" required>
 
                     <label><i class="fas fa-key"></i> Password</label>
-                    <input class="w3-input w3-border" type="password" name="password" required>
+                    <input class="w3-input w3-border" type="password" name="password" id="password" required>
                     <label><i class="fas fa-key"></i> Confirm Password</label>
-                    <input class="w3-input w3-border" type="password" name="confirm_password" required>
+                    <input class="w3-input w3-border" type="password" name="confirm_password" id="confirm_password" required>
                     
                     <button class="w3-button w3-block reg-button" type="submit">
                         <i class="fas fa-sign-in-alt"></i> Register

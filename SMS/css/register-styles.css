@@ -1,0 +1,166 @@
+:root {
+    --primary-gradient: linear-gradient(135deg, #D29C00 0%, #5E3B73 100%);
+    --secondary-gradient: linear-gradient(135deg, #ff6a88 0%, #ff9a8b 100%);
+    --shadow-elegant: 0 10px 20px rgba(0,0,0,0.1), 0 6px 6px rgba(0,0,0,0.05);
+}
+
+#globe {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    bottom: 0;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.register-container {
+    width: 100%;
+    max-width: 500px;
+    z-index: 2;
+}
+
+.register-card {
+    background: #f5f7fa;
+    border-radius: 16px;
+    box-shadow: var(--shadow-elegant);
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.register-header {
+    background: var(--primary-gradient);
+    color: #f5f7fa;
+    text-align: center;
+    padding: 20px;
+}
+
+.register-header h2 {
+    margin: 0;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.register-form {
+    padding: 20px;
+    background: #f5f7fa;
+    height: 50vh;
+    overflow-y: auto;
+}
+
+.w3-input {
+    border-radius: 8px;
+    padding: 8px 12px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+}
+
+.w3-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #363795;
+    transition: all 0.3s ease;
+}
+
+label {
+    font-weight: 600;
+    margin-bottom: 5px;
+    display: block;
+    color: #2c3e50;
+    font-size: 0.9rem;
+}
+
+.reg-button {
+    background: var(--primary-gradient);
+    color: #f5f7fa;
+    border-radius: 8px;
+    padding: 10px;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-top: 15px;
+    transition: all 0.5s ease;
+}
+
+.reg-button:hover {
+    transform: translateY(-2px);
+    transition: all 0.5s ease;
+}
+.login-button{
+    transition: all 0.5s ease;
+}
+.login-button:hover{
+    transform: translateY(-2px);
+    transition: all 0.5s ease;
+}
+
+.fas {
+    margin-right: 8px;
+}
+
+footer {
+    margin-top: auto;
+    text-align: center;
+    padding: 10px;
+    color: black;
+}
+
+.success-message {
+    display: none;
+    border-radius: 4px;
+}
+
+.password-match-indicator {
+    transition: all 0.3s ease;
+    height: 5px;
+    margin-top: 5px;
+    border-radius: 2px;
+    width: 100%;
+}
+
+.shake {
+    animation: shakeX 0.75s;
+}
+@keyframes shakeX {
+    from, to { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+.pulse {
+    animation: pulse 1s;
+}
+
+/* The entire scrollbar */
+::-webkit-scrollbar {
+    width: 10px; 
+    height: 12px; 
+}
+
+/* The draggable part of the scrollbar */
+::-webkit-scrollbar-thumb {
+    background-color: #888; 
+    border-radius: 10px;
+    border: 2px solid #ccc;
+}
+
+/* The scrollbar track (background) */
+::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+    border-radius: 10px;
+}
+
+/* The scrollbar when hovering over the thumb */
+::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+

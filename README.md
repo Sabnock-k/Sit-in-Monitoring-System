@@ -1,3 +1,3 @@
 # Sit-in-Monitoring-System
 
-E connect ang modal sa successful registration
+Add a shake in error confirm password

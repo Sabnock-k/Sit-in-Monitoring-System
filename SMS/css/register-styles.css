@@ -120,6 +120,14 @@ footer {
     border-radius: 4px;
 }
 
+.error-text {
+    color: #f44336;
+    font-size: 0.85rem;
+    margin-top: 5px;
+    display: block;
+    transition: all 0.3s ease;
+}
+
 .password-match-indicator {
     transition: all 0.3s ease;
     height: 5px;

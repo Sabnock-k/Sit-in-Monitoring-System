@@ -68,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <i class="fas fa-check-circle fa-2x"></i>
                 <h3>Registration Successful!</h3>
                 <p>Your account has been created. You can now log in.</p>
-                <a href="#" class="w3-button w3-blue w3-round-large w3-margin-top">Go to Login</a>
+                <a href="login.php" class="w3-button w3-blue w3-round-large w3-margin-top">Go to Login</a>
             </div>
 
         <!-- Registration form -->

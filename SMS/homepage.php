@@ -226,7 +226,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
                     <span><?php echo $_SESSION['idno']; ?></span>
                     
                     <span class="info-label">Name:</span>
-                    <span><?php echo $_SESSION['firstname'] . ' ' . $_SESSION['lastname']; ?></span>
+                    <span><?php echo $_SESSION['firstname'] . ' ' . $_SESSION['midname'] . ' ' . $_SESSION['lastname']; ?></span>
                     
                     <span class="info-label">Course:</span>
                     <span><?php echo $_SESSION['course']; ?></span>

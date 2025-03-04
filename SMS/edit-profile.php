@@ -16,23 +16,22 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     $course = $_POST['course'];
     $email = $_POST['email'];
     $address = $_POST['address'];
+
+    $sql = "UPDATE users SET lastname = ?, firstname = ?, midname = ?, course = ?, email = ?, address = ? WHERE idno = ?";
+    if ($stmt = $conn->prepare($sql)) {
+        $stmt->bind_param("sssssss", $lastname, $firstname, $midname, $course, $email, $address, $idno);
+        $stmt->execute();
+        $stmt->close();
+
+        // Update session variables
+        $_SESSION['lastname'] = $lastname;
+        $_SESSION['firstname'] = $firstname;
+        $_SESSION['midname'] = $midname;
+        $_SESSION['course'] = $course;
+        $_SESSION['email'] = $email;
+        $_SESSION['address'] = $address;
+    }
 }
-
-$sql = "UPDATE users SET lastname = ?, firstname = ?, midname = ?, course = ?, email = ?, address = ? WHERE idno = ?";
-if ($stmt = $conn->prepare($sql)) {
-    $stmt->bind_param("sssssss", $lastname, $firstname, $midname, $course, $email, $address, $idno);
-    $stmt->execute();
-    $stmt->close();
-
-    // Update session variables
-    $_SESSION['lastname'] = $lastname;
-    $_SESSION['firstname'] = $firstname;
-    $_SESSION['midname'] = $midname;
-    $_SESSION['course'] = $course;
-    $_SESSION['email'] = $email;
-    $_SESSION['address'] = $address;
-}
-
 ?>
 
 <!DOCTYPE html>

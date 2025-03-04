@@ -8,7 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
 
     // Prepare query to fetch user details
-    $sql = "SELECT id, idno, firstname, lastname, course, year_level, password_hash FROM users WHERE username = ?";
+    $sql = "SELECT id, idno, lastname, firstname, midname, course, year_level, email, address, username, password_hash, sessionno FROM users WHERE username = ?";
 
     if ($stmt = $conn->prepare($sql)) {
         $stmt->bind_param("s", $username);
@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Check if user exists
         if ($stmt->num_rows == 1) {
-            $stmt->bind_result($id, $idno, $firstname, $lastname, $course, $year_level, $password_hash);
+            $stmt->bind_result($id, $idno, $lastname, $firstname, $midname, $course, $year_level, $email, $address, $username, $password_hash, $sessionno);
             $stmt->fetch();
 
             // Verify password
@@ -26,9 +26,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['user_id'] = $id;
                 $_SESSION['idno'] = $idno;
                 $_SESSION['firstname'] = $firstname;
+                $_SESSION['midname'] = $midname;
                 $_SESSION['lastname'] = $lastname;
                 $_SESSION['course'] = $course;
                 $_SESSION['year_level'] = $year_level;
+                $_SESSION['email'] = $email;
+                $_SESSION['address'] = $address;
+                $_SESSION['username'] = $username;
+                $_SESSION['sessionno'] = $sessionno;
                 $_SESSION['loggedin'] = true;
 
                 // Redirect to dashboard or homepage

@@ -12,6 +12,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $midname = trim($_POST['midname']) ?: NULL;
     $course = $_POST['course'];
     $year_level = $_POST['year-level'];
+    $email = trim($_POST['email']);
+    $address = trim($_POST['address']);
     $username = trim($_POST['username']);
     $password = $_POST['password'];
     $confirm_password = $_POST["confirm_password"];
@@ -24,18 +26,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $password_hash = password_hash($password, PASSWORD_DEFAULT);
 
         // Database insert query
-        $sql = "INSERT INTO users (idno, lastname, firstname, midname, course, year_level, username, password_hash) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO users (idno, lastname, firstname, midname, course, year_level, email, address, username, password_hash, sessionno) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 30)";
 
         if ($stmt = $conn->prepare($sql)) {
-            $stmt->bind_param("ssssssss", $idno, $lastname, $firstname, $midname, $course, $year_level, $username, $password_hash);
+            // Update bind_param to match the number of parameters in SQL query
+            $stmt->bind_param("ssssssssss", $idno, $lastname, $firstname, $midname, $course, $year_level, $email, $address, $username, $password_hash);
 
             if ($stmt->execute()) {
                 $registration_success = true;
-            } else {
-                echo "Something went wrong. Please try again later.";
             }
-
             $stmt->close();
         } else {
             echo "Error preparing statement: " . $conn->error;
@@ -64,12 +64,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <img src="pictures/ccs-logo.png" style="z-index: 2; margin: 16px;" alt="Description of image">
     <div class="register-container">
         <!-- Success message -->
-        <div id="successMessage" class="w3-panel w3-green w3-round-large w3-padding-16 w3-center success-message <?php echo $registration_success ? 'w3-show animate__animated animate__fadeIn' : ''; ?>">
-                <i class="fas fa-check-circle fa-2x"></i>
-                <h3>Registration Successful!</h3>
-                <p>Your account has been created. You can now log in.</p>
-                <a href="login.php" class="w3-button w3-blue w3-round-large w3-margin-top">Go to Login</a>
-            </div>
+        <div id="successMessage" class="success-message w3-panel w3-round-large w3-padding-16 w3-center<?php echo $registration_success ? 'w3-show animate__animated animate__fadeIn' : ''; ?>">
+            <i class="fas fa-check-circle fa-2x"></i>
+            <h3>Registration Successful!</h3>
+            <p>Your account has been created. You can now log in.</p>
+            <a href="login.php" class="w3-button w3-blue w3-round-large w3-margin-top">Go to Login</a>
+        </div>
 
         <!-- Registration form -->
         <div class="register-card" id="registrationForm" <?php echo $registration_success ? 'style="display:none;"' : ''; ?>>
@@ -105,11 +105,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <option value="fourth-year">4</option>
                     </select>
 
+                    <label><i class="fas fa-envelope"></i> Email</label>
+                    <input class="w3-input w3-border" type="email" name="email" required>
+
+                    <label><i class="fas fa-map-marker-alt"></i> Address</label>
+                    <input class="w3-input w3-border" type="text" name="address" required>
+
                     <label><i class="fas fa-user"></i> Username</label>
                     <input class="w3-input w3-border" type="text" name="username" required>
 
                     <label><i class="fas fa-key"></i> Password</label>
                     <input class="w3-input w3-border" type="password" name="password" id="password" required>
+
                     <label><i class="fas fa-key"></i> Confirm Password</label>
                     <input class="w3-input w3-border" type="password" name="confirm_password" id="confirm_password" required>
                     <div class="password-match-indicator" id="passwordIndicator"></div>

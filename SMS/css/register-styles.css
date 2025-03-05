@@ -117,7 +117,7 @@ footer {
 }
 
 .success-message {
-    background-color: var(--color-success-modal);
+    background: var(--color-success-modal);
     display: none;
     border-radius: 4px;
 }

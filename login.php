@@ -37,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['loggedin'] = true;
 
                 // Redirect to dashboard or homepage
-                header("Location: homepage.php");
+                header("Location: pages/homepage.php");
                 exit();
             } else {
                 $error = "Invalid username or password!"; 

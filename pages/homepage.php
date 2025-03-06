@@ -14,8 +14,8 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - CCS Sit-in Monitoring</title>
-    <link rel="stylesheet" href="css/w3.css">
-    <link rel="stylesheet" href="css/all.css">
+    <link rel="stylesheet" href="../public/css/w3.css">
+    <link rel="stylesheet" href="../public/css/all.css">
     <style>
         :root {
             --primary-gradient: linear-gradient(135deg, #D29C00 0%, #5E3B73 100%);
@@ -202,7 +202,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     <!-- Add this right after the <body> tag and before the globe div -->
     <nav class="navbar">
         <div class="nav-brand">
-            <img src="pictures/ccs-logo.png" alt="CCS Logo" class="nav-logo">
+            <img src="../public/pictures/ccs-logo.png" alt="CCS Logo" class="nav-logo">
             <span>CCS Sit-in Monitoring</span>
         </div>
         <div class="nav-links">
@@ -220,7 +220,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
                 <i class="fas fa-user-graduate"></i> Student Information
             </div>
             <div class="card-content">
-                <img src="pictures/profile.png" alt="Profile Picture" class="profile-picture">
+                <img src="../public/pictures/profile.png" alt="Profile Picture" class="profile-picture">
                 <div class="student-info">
                     <span class="info-label">ID Number:</span>
                     <span><?php echo $_SESSION['idno']; ?></span>

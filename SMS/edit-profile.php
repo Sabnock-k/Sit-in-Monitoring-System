@@ -148,6 +148,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
             border-radius: 8px;
             font-size: 16px;
         }
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
 
         .submit-btn {
             background: var(--primary-gradient);
@@ -240,8 +247,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
 
                     <div class="form-group">
-                        <label for="course">course</label>
-                        <input type="text" id="course" name="course" value="<?php echo $_SESSION['course']; ?>">
+                    <label for="course">Course</label>
+                    <select id="course" name="course" required>
+                        <option value="" disabled selected><?php echo $_SESSION['course']; ?></option>
+                        <option value="Computer Science">Computer Science</option>
+                        <option value="Information Technology">Information Technology</option>
+                    </select>
                     </div>
 
                     <div class="form-group">

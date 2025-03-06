@@ -92,17 +92,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <label><i class="fas fa-user"></i> Course</label>
                     <select class="w3-input w3-border" name="course" required>
                         <option value="" disabled selected>-- Select Course --</option>
-                        <option value="computer-science">Computer Science</option>
-                        <option value="information-technology">Information Technology</option>
+                        <option value="Computer Science">Computer Science</option>
+                        <option value="Information Technology">Information Technology</option>
                     </select>
 
                     <label><i class="fas fa-user"></i> Year Level</label>
                     <select class="w3-input w3-border" name="year-level" required>
                         <option value="" disabled selected>-- Select Year Level --</option>
-                        <option value="first-year">1</option>
-                        <option value="second-year">2</option>
-                        <option value="third-year">3</option>
-                        <option value="fourth-year">4</option>
+                        <option value="First year">1</option>
+                        <option value="Second year">2</option>
+                        <option value="Third year">3</option>
+                        <option value="Fourth year">4</option>
                     </select>
 
                     <label><i class="fas fa-envelope"></i> Email</label>

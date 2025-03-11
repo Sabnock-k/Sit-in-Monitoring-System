@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('conn/db.php'); 
+include('../conn/db.php'); 
 $confirm_password_err = "";
 $registration_success = false;
 
@@ -51,17 +51,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register Portal</title>
-    <link rel="stylesheet" href="css/w3.css">
-    <link rel="stylesheet" href="css/all.css">
-    <link rel="stylesheet" href="css/register-styles.css">
-    <script src="scripts/register-script.js"></script>
+    <link rel="stylesheet" href="../public/css/w3.css">
+    <link rel="stylesheet" href="../public/css/all.css">
+    <link rel="stylesheet" href="../public/css/register-styles.css">
+    <script src="../public/scripts/register-script.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.globe.min.js"></script>
 </head>
 <body>
     <div id="globe"></div>
-    <img src="pictures/ccs-logo.png" style="z-index: 2; margin: 16px;" alt="Description of image">
+    <img src="../public/pictures/ccs-logo.png" style="z-index: 2; margin: 16px;" alt="Description of image">
     <div class="register-container">
         <!-- Success message -->
         <div id="successMessage" class="success-message w3-panel w3-round-large w3-padding-16 w3-center<?php echo $registration_success ? 'w3-show animate__animated animate__fadeIn' : ''; ?>">
@@ -127,7 +127,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </button>
             </form>
             <div class="login-button w3-margin ">
-                <a href="login.php" style="text-decoration: none" >Already have an Account? Click here to Login</a>
+                <a href="../login.php" style="text-decoration: none" >Already have an Account? Click here to Login</a>
             </div>
         </div>
         <footer style="text-align: center; padding: 20px; color: #f4f4f4;">
@@ -135,7 +135,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </footer>
     </div>
 
-    <img src="pictures/uc-logo.png" style="z-index: 2; margin: 16px;" alt="Description of image" width="220" height="200">
+    <img src="../public/pictures/uc-logo.png" style="z-index: 2; margin: 16px;" alt="Description of image" width="220" height="200">
 </body>
 <script>
     <?php if($registration_success): ?>

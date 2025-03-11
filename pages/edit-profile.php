@@ -6,7 +6,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     header("Location: login.php");
     exit();
 }
-include('conn/db.php');
+include('../conn/db.php');
 
 if($_SERVER["REQUEST_METHOD"] == "POST") {
     $idno = $_SESSION['idno'];
@@ -197,7 +197,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <nav class="navbar">
         <div class="nav-brand">
-            <img src="pictures/ccs-logo.png" alt="CCS Logo" class="nav-logo">
+            <img src="../public/pictures/ccs-logo.png" alt="CCS Logo" class="nav-logo">
             <span>CCS Sit-in Monitoring</span>
         </div>
         <div class="nav-links">

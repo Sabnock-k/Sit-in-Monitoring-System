@@ -60,8 +60,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Portal</title>
-    <link rel="stylesheet" href="css/w3.css">
-    <link rel="stylesheet" href="css/all.css">
+    <link rel="stylesheet" href="public/css/w3.css">
+    <link rel="stylesheet" href="public/css/all.css">
     <style>
         :root {
             --primary-gradient: linear-gradient(135deg, #D29C00 0%, #5E3B73 100%);
@@ -224,7 +224,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
     <div id="globe"></div>
-    <img src="pictures/ccs-logo.png" style="z-index: 2; margin: 16px;" alt="Description of image">
+    <img src="public/pictures/ccs-logo.png" style="z-index: 2; margin: 16px;" alt="Description of image">
     <div class="login-container">
         <div class="w3-card-4 login-card" id="login-form">
             <div class="login-header">
@@ -246,7 +246,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <i class="fas fa-sign-in-alt"></i> Login
                 </button>
                 <div class="reg-button w3-margin">
-                <a href="register.php" style="text-decoration: none" >No account? Click here to register</a>
+                <a href="pages/register.php" style="text-decoration: none" >No account? Click here to register</a>
                 </div>
             </form>
         </div>
@@ -254,6 +254,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <p>&copy; 2025 Patino, Rafael B. All rights reserved.</p>
         </footer>
     </div>
-    <img src="pictures/uc-logo.png" style="z-index: 2; margin: 16px;" alt="Description of image" width="220" height="200">
+    <img src="public/pictures/uc-logo.png" style="z-index: 2; margin: 16px;" alt="Description of image" width="220" height="200">
 </body>
 </html>

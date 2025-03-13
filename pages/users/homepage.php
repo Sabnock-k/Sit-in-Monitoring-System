@@ -213,7 +213,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     <!-- Add this right after the <body> tag and before the globe div -->
     <nav class="navbar">
         <div class="nav-brand">
-            <img src="../public/pictures/ccs-logo.png" alt="CCS Logo" class="nav-logo">
+            <img src="../../public/pictures/ccs-logo.png" alt="CCS Logo" class="nav-logo">
             <span>CCS Sit-in Monitoring</span>
         </div>
         <div class="nav-links">
@@ -221,7 +221,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
             <a href="edit-profile.php" class="nav-item"><i class="fas fa-user-edit"></i> Edit Profile</a>
             <a href="history.php" class="nav-item"><i class="fas fa-history"></i> History</a>
             <a href="reservation.php" class="nav-item"><i class="fas fa-calendar-plus"></i> Reservation</a>
-            <a href="../logout.php" class="nav-item"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            <a href="../../logout.php" class="nav-item"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </div>
     </nav>
     <div class="dashboard-container">
@@ -231,7 +231,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
                 <i class="fas fa-user-graduate"></i> Student Information
             </div>
             <div class="card-content">
-                <img src="../public/pictures/profile.png" alt="Profile Picture" class="profile-picture">
+                <img src="../../public/pictures/profile.png" alt="Profile Picture" class="profile-picture">
                 <div class="student-info">
                     <span class="info-label">ID Number:</span>
                     <span><?php echo $_SESSION['idno']; ?></span>

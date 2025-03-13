@@ -18,8 +18,21 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     <link rel="stylesheet" href="../public/css/all.css">
     <style>
         :root {
+            /* Gradients */
             --primary-gradient: linear-gradient(135deg, #D29C00 0%, #5E3B73 100%);
+            
+            /* Shadows */
             --shadow-elegant: 0 10px 20px rgba(0,0,0,0.1), 0 6px 6px rgba(0,0,0,0.05);
+            
+            /* Colors */
+            --body-bg: #F8FAFC;
+            --card-bg: #f4f4f4;
+            --text-dark: #2c3e50;
+            --text-light: #f5f7fa;
+            --border-highlight: #D29C00;
+            --announcement-bg: rgba(210, 156, 0, 0.1);
+            --nav-hover: rgba(255, 255, 255, 0.1);
+            --nav-active: rgba(255, 255, 255, 0.2);
         }
 
         body {
@@ -27,7 +40,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
             margin: 0;
             padding: 20px;
             min-height: 100vh;
-            background: #F8FAFC;
+            background: var(--body-bg);
         }
 
         .dashboard-container {
@@ -37,10 +50,11 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 20px;
             padding: 20px;
+            margin-top: 80px;
         }
 
         .dashboard-card {
-            background: #f4f4f4;
+            background: var(--card-bg);
             border-radius: 16px;
             box-shadow: var(--shadow-elegant);
             overflow: hidden;
@@ -48,7 +62,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 
         .card-header {
             background: var(--primary-gradient);
-            color: #f5f7fa;
+            color: var(--text-light);
             padding: 15px;
             font-weight: 600;
         }
@@ -64,7 +78,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
             object-fit: cover;
             margin: 0 auto 20px;
             display: block;
-            border: 4px solid #f4f4f4;
+            border: 4px solid var(--card-bg);
             box-shadow: var(--shadow-elegant);
             background: #fff;
         }
@@ -78,32 +92,33 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 
         .info-label {
             font-weight: 600;
-            color: #2c3e50;
+            color: var(--text-dark);
         }
 
         .announcement {
-            border-left: 4px solid #D29C00;
+            border-left: 4px solid var(--border-highlight);
             margin-bottom: 15px;
             padding: 10px;
-            background: rgba(210, 156, 0, 0.1);
+            background: var(--announcement-bg);
         }
 
         .announcelist {
             padding: 0;
-            max-height: 300px; /* Fixed height to enable scrolling */
-            overflow-y: auto; /* Enables vertical scrolling */
-            scrollbar-width: thin; /* For Firefox */
-            scrollbar-color: #D29C00 #f4f4f4;
+            max-height: 300px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--border-highlight) var(--card-bg);
         }
 
         .rules-list {
             padding: 0;
-            max-height: 300px; /* Fixed height to enable scrolling */
-            overflow-y: auto; /* Enables vertical scrolling */
-            scrollbar-width: thin; /* For Firefox */
-            scrollbar-color: #D29C00 #f4f4f4;
+            max-height: 300px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--border-highlight) var(--card-bg);
         }
-        #Title{
+
+        #Title {
             text-align: center;
             display: block;
         }
@@ -113,12 +128,13 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
             top: 20px;
             right: 20px;
             background: var(--primary-gradient);
-            color: white;
+            color: var(--text-light);
             padding: 10px 20px;
             border-radius: 8px;
             text-decoration: none;
             z-index: 100;
         }
+
         .navbar {
             position: fixed;
             top: 0;
@@ -136,13 +152,13 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
         .nav-brand {
             display: flex;
             align-items: center;
-            color: #f5f7fa;
+            color: var(--text-light);
         }
 
         .nav-logo {
             height: 40px;
             margin-right: 10px;
-            background: #f4f4f4;
+            background: var(--card-bg);
             border-radius: 50%;
         }
 
@@ -152,7 +168,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
         }
 
         .nav-item {
-            color: #f5f7fa;
+            color: var(--text-light);
             text-decoration: none;
             padding: 8px 16px;
             border-radius: 8px;
@@ -160,20 +176,14 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
         }
 
         .nav-item:hover {
-            background: rgba(255, 255, 255, 0.1);
+            background: var(--nav-hover);
             transform: translateY(-2px);
         }
 
         .nav-item.active {
-            background: rgba(255, 255, 255, 0.2);
+            background: var(--nav-active);
         }
 
-        /* Update dashboard-container to account for navbar */
-        .dashboard-container {
-            margin-top: 80px;
-        }
-
-        /* Make navbar responsive */
         @media (max-width: 768px) {
             .navbar {
                 flex-direction: column;
@@ -196,6 +206,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
             }
         }
 
+
     </style>
 </head>
 <body>
@@ -210,7 +221,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
             <a href="edit-profile.php" class="nav-item"><i class="fas fa-user-edit"></i> Edit Profile</a>
             <a href="history.php" class="nav-item"><i class="fas fa-history"></i> History</a>
             <a href="reservation.php" class="nav-item"><i class="fas fa-calendar-plus"></i> Reservation</a>
-            <a href="logout.php" class="nav-item"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            <a href="../logout.php" class="nav-item"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </div>
     </nav>
     <div class="dashboard-container">

@@ -3,13 +3,17 @@ session_start();
 
 // Check if user is logged in
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
-    header("Location: login.php");
+    header("Location: ../../login.php");
+    exit();
+} elseif ($_SESSION['username'] == 'admin') {
+    header("Location: ../admin/homepage.php");
     exit();
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,10 +24,10 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
         :root {
             /* Gradients */
             --primary-gradient: linear-gradient(135deg, #D29C00 0%, #5E3B73 100%);
-            
+
             /* Shadows */
-            --shadow-elegant: 0 10px 20px rgba(0,0,0,0.1), 0 6px 6px rgba(0,0,0,0.05);
-            
+            --shadow-elegant: 0 10px 20px rgba(0, 0, 0, 0.1), 0 6px 6px rgba(0, 0, 0, 0.05);
+
             /* Colors */
             --body-bg: #F8FAFC;
             --card-bg: #f4f4f4;
@@ -41,6 +45,89 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
             padding: 20px;
             min-height: 100vh;
             background: var(--body-bg);
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--primary-gradient);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow-elegant);
+            z-index: 1000;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            color: var(--text-light);
+        }
+
+        .nav-logo {
+            height: 40px;
+            margin-right: 10px;
+            background: var(--card-bg);
+            border-radius: 50%;
+        }
+
+        .logout-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--primary-gradient);
+            color: var(--text-light);
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            z-index: 100;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-item {
+            color: var(--text-light);
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover {
+            background: var(--nav-hover);
+            transform: translateY(-2px);
+        }
+
+        .nav-item.active {
+            background: var(--nav-active);
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                padding: 10px;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                width: 100%;
+                text-align: center;
+                margin-top: 10px;
+            }
+
+            .nav-item {
+                padding: 10px;
+            }
+
+            .dashboard-container {
+                margin-top: 200px;
+            }
         }
 
         .dashboard-container {
@@ -122,93 +209,9 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
             text-align: center;
             display: block;
         }
-
-        .logout-btn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: var(--primary-gradient);
-            color: var(--text-light);
-            padding: 10px 20px;
-            border-radius: 8px;
-            text-decoration: none;
-            z-index: 100;
-        }
-
-        .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: var(--primary-gradient);
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: var(--shadow-elegant);
-            z-index: 1000;
-        }
-
-        .nav-brand {
-            display: flex;
-            align-items: center;
-            color: var(--text-light);
-        }
-
-        .nav-logo {
-            height: 40px;
-            margin-right: 10px;
-            background: var(--card-bg);
-            border-radius: 50%;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 20px;
-        }
-
-        .nav-item {
-            color: var(--text-light);
-            text-decoration: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .nav-item:hover {
-            background: var(--nav-hover);
-            transform: translateY(-2px);
-        }
-
-        .nav-item.active {
-            background: var(--nav-active);
-        }
-
-        @media (max-width: 768px) {
-            .navbar {
-                flex-direction: column;
-                padding: 10px;
-            }
-            
-            .nav-links {
-                flex-direction: column;
-                width: 100%;
-                text-align: center;
-                margin-top: 10px;
-            }
-            
-            .nav-item {
-                padding: 10px;
-            }
-            
-            .dashboard-container {
-                margin-top: 200px;
-            }
-        }
-
-
     </style>
 </head>
+
 <body>
     <!-- Add this right after the <body> tag and before the globe div -->
     <nav class="navbar">
@@ -235,13 +238,13 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
                 <div class="student-info">
                     <span class="info-label">ID Number:</span>
                     <span><?php echo $_SESSION['idno']; ?></span>
-                    
+
                     <span class="info-label">Name:</span>
                     <span><?php echo $_SESSION['firstname'] . ' ' . $_SESSION['midname'] . ' ' . $_SESSION['lastname']; ?></span>
-                    
+
                     <span class="info-label">Course:</span>
                     <span><?php echo $_SESSION['course']; ?></span>
-                    
+
                     <span class="info-label">Year Level:</span>
                     <span><?php echo $_SESSION['year_level']; ?></span>
                     <span class="info-label">Sessions Left:</span>
@@ -263,11 +266,13 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
                     </div>
                     <div class="announcement">
                         <h4>CCS Admin | 2025-Feb-03</h4>
-                        <p>The College of Computer Studies will open the registration of students for the Sit-in privilege starting tomorrow. Thank you! Lab Supervisor</p>
+                        <p>The College of Computer Studies will open the registration of students for the Sit-in
+                            privilege starting tomorrow. Thank you! Lab Supervisor</p>
                     </div>
                     <div class="announcement">
                         <h4>CCS Admin | 2024-May-08</h4>
-                        <p>Important Announcement We are excited to announce the launch of our new website! 🎉 Explore our latest products and services now!</p>
+                        <p>Important Announcement We are excited to announce the launch of our new website! 🎉 Explore
+                            our latest products and services now!</p>
                     </div>
                 </div>
             </div>
@@ -283,13 +288,19 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
                     <b id="Title">University of Cebu</b>
                     <b id="Title">COLLEGE OF INFORMATION & COMPUTER STUDIES</b>
                     <b>LABORATORY RULES AND REGULATIONS</b>
-                    <p>To avoid embarrassment and maintain camaraderie with your friends and superiors at our laboratories, please observe the following:</p>
-                    <p>1. Maintain silence, proper decorum, and discipline inside the laboratory. Mobile phones, walkmans and other personal pieces of equipment must be switched off.</p>
-                    <p>2. Games are not allowed inside the lab. This includes computer-related games, card games and other games that may disturb the operation of the lab.</p>
-                    <p>3. Surfing the Internet is allowed only with the permission of the instructor. Downloading and installing of software are strictly prohibited.</p>
-                    <p>4. Getting access to other websites not related to the course (especially pornographic and illicit sites) is strictly prohibited.</p>
+                    <p>To avoid embarrassment and maintain camaraderie with your friends and superiors at our
+                        laboratories, please observe the following:</p>
+                    <p>1. Maintain silence, proper decorum, and discipline inside the laboratory. Mobile phones,
+                        walkmans and other personal pieces of equipment must be switched off.</p>
+                    <p>2. Games are not allowed inside the lab. This includes computer-related games, card games and
+                        other games that may disturb the operation of the lab.</p>
+                    <p>3. Surfing the Internet is allowed only with the permission of the instructor. Downloading and
+                        installing of software are strictly prohibited.</p>
+                    <p>4. Getting access to other websites not related to the course (especially pornographic and
+                        illicit sites) is strictly prohibited.</p>
                     <p>5. Deleting computer files and changing the set-up of the computer is a major offense.</p>
-                    <p>6. Observe computer time usage carefully. A fifteen-minute allowance is given for each use. Otherwise, the unit will be given to those who wish to "sit-in".</p>
+                    <p>6. Observe computer time usage carefully. A fifteen-minute allowance is given for each use.
+                        Otherwise, the unit will be given to those who wish to "sit-in".</p>
                     <p>7. Observe proper decorum while inside the laboratory.</p>
                     <ul>
                         <li>Do not get inside the lab unless the instructor is present.</li>
@@ -298,20 +309,29 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
                         <li>At the end of class, all software programs must be closed.</li>
                         <li>Return all chairs to their proper places after using.</li>
                     </ul>
-                    <p>8. Chewing gum, eating, drinking, smoking, and other forms of vandalism are prohibited inside the lab.</p>
-                    <p>9. Anyone causing a continual disturbance will be asked to leave the lab. Acts or gestures offensive to the members of the community, including public display of physical intimacy, are not tolerated.</p>
-                    <p>10. Persons exhibiting hostile or threatening behavior such as yelling, swearing, or disregarding requests made by lab personnel will be asked to leave the lab.</p>
-                    <p>11. For serious offense, the lab personnel may call the Civil Security Office (CSU) for assistance.</p>
-                    <p>12. Any technical problem or difficulty must be addressed to the laboratory supervisor, student assistant or instructor immediately.</p>
+                    <p>8. Chewing gum, eating, drinking, smoking, and other forms of vandalism are prohibited inside the
+                        lab.</p>
+                    <p>9. Anyone causing a continual disturbance will be asked to leave the lab. Acts or gestures
+                        offensive to the members of the community, including public display of physical intimacy, are
+                        not tolerated.</p>
+                    <p>10. Persons exhibiting hostile or threatening behavior such as yelling, swearing, or disregarding
+                        requests made by lab personnel will be asked to leave the lab.</p>
+                    <p>11. For serious offense, the lab personnel may call the Civil Security Office (CSU) for
+                        assistance.</p>
+                    <p>12. Any technical problem or difficulty must be addressed to the laboratory supervisor, student
+                        assistant or instructor immediately.</p>
                     <br><br>
                     <b>DISCIPLINARY ACTIONS</b>
                     <ul>
-                        <li>First Offense - The Head or the Dean or OIC recommends to the Guidance Center for a suspension from classes for each offender.</li>
-                        <li>Second and Subsequent Offenses - A recommendation for a heavier sanction will be endorsed to the Guidance Center.</li>
+                        <li>First Offense - The Head or the Dean or OIC recommends to the Guidance Center for a
+                            suspension from classes for each offender.</li>
+                        <li>Second and Subsequent Offenses - A recommendation for a heavier sanction will be endorsed to
+                            the Guidance Center.</li>
                     </ul>
                 </div>
             </div>
         </div>
     </div>
 </body>
+
 </html>

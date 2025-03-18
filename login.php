@@ -1,6 +1,16 @@
 <?php
 session_start();
-include('conn/db.php'); 
+include('conn/db.php');
+
+// check if user is logged in
+if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true && $_SESSION['username'] == 'admin') {
+    header("Location: pages/admin/homepage.php");
+    exit();
+} elseif (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
+    header("Location: pages/users/homepage.php");
+    exit();
+}
+
 $error = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -37,21 +47,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['loggedin'] = true;
 
                 // Redirect to dashboard or homepage
-                header("Location: pages/users/homepage.php");
+                header("Location: pages/admin/homepage.php");
                 exit();
             } else {
-                $error = "Invalid username or password!"; 
+                $error = "Invalid username or password!";
             }
         } else {
-            if(strtolower($username == "admin") && strtolower($password == "adminpassword")){
+            if (strtolower($username == "admin") && strtolower($password == "adminpassword")) {
                 $_SESSION['user_id'] = '1';
+                $_SESSION['username'] = 'admin';
                 $_SESSION['loggedin'] = true;
 
                 header("Location: pages/admin/homepage.php");
-            }else{
+            } else {
                 $error = "Invalid username or password!";
             }
-            $error = "No user found! Try again!";  
+            $error = "No user found! Try again!";
         }
         $stmt->close();
     } else {
@@ -64,6 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -74,7 +86,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         :root {
             --primary-gradient: linear-gradient(135deg, #D29C00 0%, #5E3B73 100%);
             --secondary-gradient: linear-gradient(135deg, #ff6a88 0%, #ff9a8b 100%);
-            --shadow-elegant: 0 10px 20px rgba(0,0,0,0.1), 0 6px 6px rgba(0,0,0,0.05);
+            --shadow-elegant: 0 10px 20px rgba(0, 0, 0, 0.1), 0 6px 6px rgba(0, 0, 0, 0.05);
         }
 
         #globe {
@@ -164,11 +176,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             transition: all 0.5s ease;
         }
 
-        .reg-button{
+        .reg-button {
             transition: all 0.5s ease;
         }
-        
-        .reg-button:hover{
+
+        .reg-button:hover {
             transform: translateY(-3px);
             transition: all 0.5s ease;
         }
@@ -177,7 +189,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             margin-right: 10px;
         }
 
-        .error{
+        .error {
             color: #E52020;
             display: flex;
             justify-content: center;
@@ -186,19 +198,55 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         .shake {
             animation: shake 0.5s ease-in-out;
         }
+
         @keyframes shake {
-            0% { transform: translate(0, 0) rotate(0deg); }
-                0% { transform: translateX(0); }
-                10% { transform: translateX(-10px); }
-                20% { transform: translateX(15px); }
-                30% { transform: translateX(-20px); }
-                40% { transform: translateX(10px); }
-                50% { transform: translateX(-15px); }
-                60% { transform: translateX(20px); }
-                70% { transform: translateX(-10px); }
-                80% { transform: translateX(15px); }
-                90% { transform: translateX(-5px); }
-                100% { transform: translateX(0); }
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+
+            0% {
+                transform: translateX(0);
+            }
+
+            10% {
+                transform: translateX(-10px);
+            }
+
+            20% {
+                transform: translateX(15px);
+            }
+
+            30% {
+                transform: translateX(-20px);
+            }
+
+            40% {
+                transform: translateX(10px);
+            }
+
+            50% {
+                transform: translateX(-15px);
+            }
+
+            60% {
+                transform: translateX(20px);
+            }
+
+            70% {
+                transform: translateX(-10px);
+            }
+
+            80% {
+                transform: translateX(15px);
+            }
+
+            90% {
+                transform: translateX(-5px);
+            }
+
+            100% {
+                transform: translateX(0);
+            }
         }
     </style>
 
@@ -209,27 +257,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             setTimeout(() => form.classList.remove("shake"), 300);
         }
     </script>
-    
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.globe.min.js"></script>
 
     <script>
         window.addEventListener('DOMContentLoaded', () => {
             VANTA.GLOBE({
-            el: "#globe",
-            mouseControls: true,
-            touchControls: true,
-            gyroControls: false,
-            minHeight: 200.00,
-            minWidth: 200.00,
-            scale: 1.00,
-            scaleMobile: 1.00,
-            color: 0xD29C00,
-            backgroundColor: 0x0e2f60
+                el: "#globe",
+                mouseControls: true,
+                touchControls: true,
+                gyroControls: false,
+                minHeight: 200.00,
+                minWidth: 200.00,
+                scale: 1.00,
+                scaleMobile: 1.00,
+                color: 0xD29C00,
+                backgroundColor: 0x0e2f60
             })
         });
     </script>
 </head>
+
 <body>
     <div id="globe"></div>
     <img src="public/pictures/ccs-logo.png" style="z-index: 2; margin: 16px;" alt="Description of image">
@@ -246,15 +295,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <label><i class="fas fa-user"></i> Username</label>
                 <input class="w3-input w3-border" type="text" name="username" required>
-                
+
                 <label><i class="fas fa-key"></i> Password</label>
                 <input class="w3-input w3-border" type="password" name="password" required>
-                
+
                 <button class="w3-button w3-block w3-margin-top login-button" type="submit">
                     <i class="fas fa-sign-in-alt"></i> Login
                 </button>
                 <div class="reg-button w3-margin">
-                <a href="pages/users/register.php" style="text-decoration: none" >No account? Click here to register</a>
+                    <a href="pages/users/register.php" style="text-decoration: none">No account? Click here to
+                        register</a>
                 </div>
             </form>
         </div>
@@ -262,6 +312,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <p>&copy; 2025 Patino, Rafael B. All rights reserved.</p>
         </footer>
     </div>
-    <img src="public/pictures/uc-logo.png" style="z-index: 2; margin: 16px;" alt="Description of image" width="220" height="200">
+    <img src="public/pictures/uc-logo.png" style="z-index: 2; margin: 16px;" alt="Description of image" width="220"
+        height="200">
 </body>
+
 </html>

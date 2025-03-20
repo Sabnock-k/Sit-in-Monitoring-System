@@ -85,7 +85,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
                     <span class="heading-font font-semibold text-lg text-primary">CCS <span class="text-secondary">Sit-in</span> Monitoring</span>
                 </div>
                 <div class="hidden md:flex space-x-1">
-                    <a href="dashboard.php" class="px-4 py-2 rounded-md transition duration-300 flex items-center font-medium text-primary bg-blue-50">
+                    <a href="homepage.php" class="px-4 py-2 rounded-md transition duration-300 flex items-center font-medium text-primary bg-blue-50">
                         <i class="fas fa-home mr-2"></i> 
                         <span>Dashboard</span>
                     </a>

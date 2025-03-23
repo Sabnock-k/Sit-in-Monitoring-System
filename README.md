@@ -1,3 +1,3 @@
 # Sit-in-Monitoring-System
 
-AYOHA ANG EDIT UG REGISTER
+fix the announcement panel refer to d

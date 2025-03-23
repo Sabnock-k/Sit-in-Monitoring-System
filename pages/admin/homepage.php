@@ -146,6 +146,13 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
         sitInDropdown.classList.toggle('hidden');
     });
 
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(event) {
+        if (!sitInButton.contains(event.target) && !sitInDropdown.contains(event.target)) {
+            sitInDropdown.classList.add('hidden');
+        }
+    });
+
 </script>
 
 </html>

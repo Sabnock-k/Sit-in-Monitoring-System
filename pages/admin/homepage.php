@@ -104,11 +104,11 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
                     </div>
                     
                     <div class="relative group">
-                        <button class="px-3 py-2 rounded-md transition duration-300 flex items-center text-gray-700 hover:bg-gray-100">
+                        <button class="dropdown-button px-3 py-2 rounded-md transition duration-300 flex items-center text-gray-700 hover:bg-gray-100">
                             <i class="fas fa-clipboard-list mr-2"></i><span>Sit-in</span>
-                            <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                            <i class="icon fas fa-chevron-down ml-1 text-xs"></i>
                         </button>
-                        <div class="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden group-hover:block z-50">
+                        <div class="dropdown-content absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden group-hover:block z-50">
                             <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Manage Sit-in</a>
                             <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">View Records</a>
                             <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Reports</a>
@@ -131,16 +131,21 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
                         <i class="fas fa-sign-out-alt mr-2"></i><span>Logout</span>
                     </a>
                 </div>
-                
-                <!-- Mobile menu button -->
-                <div class="md:hidden">
-                    <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none" id="mobile-menu-button">
-                        <i class="fas fa-bars text-xl"></i>
-                    </button>
-                </div>
             </div>
         </div>
     </nav>
 </body>
+
+<script>
+    //Handle sit-in button dropdown
+    const sitInButton = document.querySelector('.dropdown-button');
+    const sitInDropdown = document.querySelector('.dropdown-content');
+
+    sitInButton.addEventListener('click', () => {
+        //show dropdown
+        sitInDropdown.classList.toggle('hidden');
+    });
+
+</script>
 
 </html>

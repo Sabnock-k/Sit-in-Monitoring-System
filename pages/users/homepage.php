@@ -73,7 +73,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     </style>
 </head>
 
-<body class="bg-gray-50 text-gray-800 min-h-screen">
+<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
     <!-- Navigation -->
     <nav class="bg-white border-b border-gray-200 fixed w-full z-50 shadow-sm">
         <div class="container mx-auto px-4">
@@ -113,30 +113,10 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
                 </div>
             </div>
         </div>
-        <!-- Mobile menu, show/hide based on menu state -->
-        <div class="md:hidden hidden" id="mobile-menu">
-            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-gray-200">
-                <a href="dashboard.php" class="flex items-center px-3 py-2 rounded-md text-primary bg-blue-50 font-medium">
-                    <i class="fas fa-home mr-2"></i>Dashboard
-                </a>
-                <a href="edit-profile.php" class="flex items-center px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100">
-                    <i class="fas fa-user-edit mr-2"></i>Profile
-                </a>
-                <a href="history.php" class="flex items-center px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100">
-                    <i class="fas fa-history mr-2"></i>History
-                </a>
-                <a href="reservation.php" class="flex items-center px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100">
-                    <i class="fas fa-calendar-plus mr-2"></i>Reserve
-                </a>
-                <a href="../../logout.php" class="flex items-center px-3 py-2 rounded-md text-white bg-primary hover:bg-primary/90">
-                    <i class="fas fa-sign-out-alt mr-2"></i>Log Out
-                </a>
-            </div>
-        </div>
     </nav>
 
     <!-- Main Content -->
-    <div class="container mx-auto px-4 pt-24 pb-8">
+    <div class="container mx-auto px-4 pt-24 pb-8 flex-grow">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- Welcome Card -->
             <div class="bg-white rounded-lg border border-gray-200 shadow-custom hover:shadow-custom-hover transition-shadow duration-300">
@@ -359,68 +339,5 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
             <p class="text-xs mt-1">Developed by Rafael B. Patiño</p>
         </div>
     </footer>
-    
-    <!-- Simple script for mobile menu toggle -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const menuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
-            
-            menuButton.addEventListener('click', function() {
-                if (mobileMenu.classList.contains('hidden')) {
-                    mobileMenu.classList.remove('hidden');
-                } else {
-                    mobileMenu.classList.add('hidden');
-                }
-            });
-        });
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const menuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
-            
-            menuButton.addEventListener('click', function() {
-                if (mobileMenu.classList.contains('hidden')) {
-                    mobileMenu.classList.remove('hidden');
-                } else {
-                    mobileMenu.classList.add('hidden');
-                }
-            });
-            
-            // Add the new functionality for the protocols button
-            const protocolsBtn = document.getElementById('view-protocols-btn');
-            const completeProtocols = document.getElementById('complete-protocols');
-            const protocolsIcon = document.getElementById('protocols-icon');
-            const protocolsText = document.getElementById('protocols-text');
-            
-            protocolsBtn.addEventListener('click', function() {
-                if (completeProtocols.classList.contains('hidden')) {
-                    // Show the complete protocols
-                    completeProtocols.classList.remove('hidden');
-                    // Add a subtle animation
-                    completeProtocols.classList.add('animate-fadeIn');
-                    // Change the icon to up arrow
-                    protocolsIcon.classList.remove('fa-chevron-down');
-                    protocolsIcon.classList.add('fa-chevron-up');
-                    // Change the text
-                    protocolsText.textContent = 'Hide complete laboratory protocols';
-                    // Change button background
-                    protocolsBtn.classList.remove('bg-blue-50');
-                    protocolsBtn.classList.add('bg-blue-100');
-                } else {
-                    // Hide the complete protocols
-                    completeProtocols.classList.add('hidden');
-                    // Change the icon back to down arrow
-                    protocolsIcon.classList.remove('fa-chevron-up');
-                    protocolsIcon.classList.add('fa-chevron-down');
-                    // Change the text back
-                    protocolsText.textContent = 'View complete laboratory protocols';
-                    // Change button background back
-                    protocolsBtn.classList.remove('bg-blue-100');
-                    protocolsBtn.classList.add('bg-blue-50');
-                }
-            });
-        });
-    </script>
 </body>
 </html>

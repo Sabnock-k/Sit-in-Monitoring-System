@@ -17,6 +17,10 @@ $sql = "SELECT COUNT(*) AS total_students FROM users";
 $result = $conn->query($sql);
 $total_students = $result->fetch_assoc()['total_students'];
 
+// Call all announcements from the database
+$sql = "SELECT * FROM announcements ORDER BY created_at DESC";
+$result = mysqli_query($conn, $sql);
+$announcements = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
 // Handle form submission
 $success_message = '';
@@ -47,6 +51,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_announcement']
     }
 }
 
+// Edit announcement form
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_announcement'])) {
+    // Validate and sanitize input
+    $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
+    $title = $conn->real_escape_string(trim($_POST['title'] ?? ''));
+    $content = $conn->real_escape_string(trim($_POST['content'] ?? ''));
+
+    // Check for empty fields
+    if ($id <= 0 || empty($title) || empty($content)) {
+        $error_message = "All fields are required.";
+    } else {
+        // Prepare and execute the query securely using prepared statements
+        $stmt = $conn->prepare("UPDATE announcements SET title = ?, content = ? WHERE id = ?");
+        if ($stmt) {
+            $stmt->bind_param("ssi", $title, $content, $id);
+            
+            if ($stmt->execute()) {
+                $success_message = "Announcement updated successfully!";
+                $stmt->close();
+                
+                // Refresh the announcements list
+                $sql = "SELECT * FROM announcements ORDER BY created_at DESC";
+                $result = mysqli_query($conn, $sql);
+                $announcements = mysqli_fetch_all($result, MYSQLI_ASSOC);
+            } else {
+                $error_message = "Error updating announcement: " . $stmt->error;
+                $stmt->close();
+            }
+        } else {
+            $error_message = "Database error: " . $conn->error;
+        }
+    }
+}
+
 $conn->close();
 ?>
 <!DOCTYPE html>
@@ -60,27 +98,6 @@ $conn->close();
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="../../public/css/all.css">
-    <!-- TinyMCE for rich text editor -->
-    <script src="https://cdn.tiny.cloud/1/79559g884klo3hq6j8ac9wqxvlcn4aq5oy8in5fs0jirep4y/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#0056b3',
-                        secondary: '#343a40',
-                        accent: '#ffc107',
-                        light: '#f8f9fa',
-                        dark: '#212529',
-                    },
-                    boxShadow: {
-                        'custom': '0 4px 6px rgba(0, 0, 0, 0.1)',
-                        'custom-hover': '0 10px 15px rgba(0, 0, 0, 0.1)',
-                    }
-                },
-            },
-        }
-    </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap');
         
@@ -179,71 +196,126 @@ $conn->close();
     <!-- Main Content Area -->
     <div class="pt-16 px-4 md:px-6 lg:px-8 container mx-auto max-w-6xl">
         <div class="py-6">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Announcement Panel - Now smaller and in a column -->
-                <div class="md:col-span-1">
-                    <div class="bg-white rounded-lg border border-gray-300 shadow-md hover:shadow-xl transition-shadow duration-300 p-4">
-                        <h2 class="text-lg font-semibold heading-font text-gray-800 mb-3">Create Announcement</h2>
-                        
-                        <?php if(!empty($success_message)): ?>
-                            <div id="alert-box" class="bg-green-100 border-l-4 border-green-500 text-green-700 p-3 mb-4 rounded text-sm" role="alert">
-                                <p><i class="fas fa-check-circle mr-1"></i> <?php echo $success_message; ?></p>
-                            </div>
-                        <?php endif; ?>
-                        
-                        <?php if(!empty($error_message)): ?>
-                            <div id="alert-box" class="bg-red-100 border-l-4 border-red-500 text-red-700 p-3 mb-4 rounded text-sm" role="alert">
-                                <p><i class="fas fa-exclamation-circle mr-1"></i> <?php echo $error_message; ?></p>
-                            </div>
-                        <?php endif; ?>
-                        
-                        <form id="announcementForm" method="POST" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" class="space-y-4">
-                            <!-- Title Field -->
-                            <div>
-                                <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Title <span class="text-red-500">*</span></label>
-                                <input type="text" id="title" name="title" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-primary focus:border-primary" value="<?php echo isset($_POST['title']) ? htmlspecialchars($_POST['title']) : ''; ?>">
-                            </div>
-                            
-                            <!-- Content Field -->
-                            <div>
-                                <label for="content" class="block text-sm font-medium text-gray-700 mb-1">Content <span class="text-red-500">*</span></label>
-                                <textarea id="content" name="content" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-primary focus:border-primary" rows="4"><?php echo isset($_POST['content']) ? htmlspecialchars($_POST['content']) : ''; ?></textarea>
-                            </div>
-
-                            <!-- Submit Button -->
-                            <div class="flex justify-end space-x-2">
-                                <button type="button" id="clearBtn" class="px-3 py-1.5 text-sm border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition duration-200">
-                                    Clear
-                                </button>
-                                <button type="submit" name="create_announcement" class="px-3 py-1.5 text-sm bg-primary text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition duration-200">
-                                    Post
-                                </button>
-                            </div>
-                        </form>
+            <div class="grid grid-cols-1 grid-rows-0 gap-4 mb-6">
+                <div class="bg-white rounded-lg border border-gray-300 shadow-md hover:shadow-xl transition-shadow duration-300 p-4">
+                    <h2 class="text-lg font-semibold heading-font text-gray-800 mb-3">Dashboard Overview</h2>
+                    <!-- Add your dashboard content here -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Statistics cards or other content -->
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <h3 class="font-medium text-primary">Total Students</h3>
+                            <p class="text-2xl font-bold"><?php echo htmlspecialchars($total_students)?></p>
+                        </div>
+                        <div class="bg-green-50 p-4 rounded-lg">
+                            <h3 class="font-medium text-green-600">Active Sit-ins</h3>
+                            <p class="text-2xl font-bold">0</p>
+                        </div>
                     </div>
                 </div>
-                
-                <!-- Other dashboard content can go in these columns -->
-                <div class="md:col-span-2">
-                    <div class="bg-white rounded-lg border border-gray-300 shadow-md hover:shadow-xl transition-shadow duration-300 p-4">
-                        <h2 class="text-lg font-semibold heading-font text-gray-800 mb-3">Dashboard Overview</h2>
-                        <!-- Add your dashboard content here -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <!-- Statistics cards or other content -->
-                            <div class="bg-blue-50 p-4 rounded-lg">
-                                <h3 class="font-medium text-primary">Total Students</h3>
-                                <p class="text-2xl font-bold"><?php echo htmlspecialchars($total_students)?></p>
-                            </div>
-                            <div class="bg-green-50 p-4 rounded-lg">
-                                <h3 class="font-medium text-green-600">Active Sit-ins</h3>
-                                <p class="text-2xl font-bold">0</p>
-                            </div>
+            </div>
+
+            <!-- Announcement -->
+            <div class="grid grid-cols-2 grid-rows-1 gap-4">
+                <div class="bg-white rounded-lg border border-gray-300 shadow-md hover:shadow-xl transition-shadow duration-300 p-4">
+                    <h2 class="text-lg font-semibold heading-font text-gray-800 mb-3">Create Announcement</h2>
+                    
+                    <?php if(!empty($success_message)): ?>
+                        <div id="alert-box" class="bg-green-100 border-l-4 border-green-500 text-green-700 p-3 mb-4 rounded text-sm" role="alert">
+                            <p><i class="fas fa-check-circle mr-1"></i> <?php echo $success_message; ?></p>
                         </div>
+                    <?php endif; ?>
+                    
+                    <?php if(!empty($error_message)): ?>
+                        <div id="alert-box" class="bg-red-100 border-l-4 border-red-500 text-red-700 p-3 mb-4 rounded text-sm" role="alert">
+                            <p><i class="fas fa-exclamation-circle mr-1"></i> <?php echo $error_message; ?></p>
+                        </div>
+                    <?php endif; ?>
+                    
+                    <form id="announcementForm" method="POST" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" class="space-y-4">
+                        <!-- Title Field -->
+                        <div>
+                            <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Title <span class="text-red-500">*</span></label>
+                            <input type="text" id="title" name="title" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-primary focus:border-primary" value="<?php echo isset($_POST['title']) ? htmlspecialchars($_POST['title']) : ''; ?>">
+                        </div>
+                        
+                        <!-- Content Field -->
+                        <div>
+                            <label for="content" class="block text-sm font-medium text-gray-700 mb-1">Content <span class="text-red-500">*</span></label>
+                            <textarea id="content" name="content" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-primary focus:border-primary" rows="4"><?php echo isset($_POST['content']) ? htmlspecialchars($_POST['content']) : ''; ?></textarea>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="flex justify-end space-x-2">
+                            <button type="button" id="clearBtn" class="px-3 py-1.5 text-sm border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition duration-200">
+                                Clear
+                            </button>
+                            <button type="submit" name="create_announcement" class="px-3 py-1.5 text-sm bg-blue-500 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition duration-200">
+                                Post
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="bg-white rounded-lg border border-gray-200 shadow-custom hover:shadow-custom-hover transition-shadow duration-300">
+                    <div class="border-b border-gray-200 p-4 flex justify-between items-center">
+                        <h2 class="heading-font text-lg font-semibold text-gray-800">Announcements</h2>
+                    </div>
+                    <div class="p-4">
+                        <div class="space-y-4 max-h-[380px] overflow-y-auto pr-2">
+                            <!-- Display all announcements -->
+                            <?php foreach ($announcements as $announcement): ?>
+                                <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <h4 class="font-medium"><?php echo htmlspecialchars($announcement['title']); ?></h4>
+                                        <div class="flex items-center space-x-2">
+                                            <span class="text-xs text-gray-500"><?php echo date('M d, Y', strtotime($announcement['created_at'])); ?></span>
+                                            <!-- Edit Button -->
+                                            <button 
+                                                class="edit-btn px-2 py-1 text-xs bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-200"
+                                                data-id="<?php echo $announcement['id']; ?>"
+                                                data-title="<?php echo htmlspecialchars($announcement['title']); ?>"
+                                                data-content="<?php echo htmlspecialchars($announcement['content']); ?>">
+                                                Edit
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <p class="text-gray-700"><?php echo htmlspecialchars($announcement['content']); ?></p>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Edit Announcement Modal -->
+                <div id="editModal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+                        <h3 class="text-lg font-semibold mb-4">Edit Announcement</h3>
+                        <form id="editAnnouncementForm" method="POST" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
+                            <input type="hidden" id="editId" name="id">
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700">Title</label>
+                                <input type="text" id="editTitle" name="title" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary">
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700">Content</label>
+                                <textarea id="editContent" name="content" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary" rows="4"></textarea>
+                            </div>
+                            <div class="flex justify-end space-x-2">
+                                <button type="button" id="closeEditModal" class="px-3 py-1.5 text-sm bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition">Cancel</button>
+                                <button type="submit" name="edit_announcement" class="px-3 py-1.5 text-sm bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">Save Changes</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 py-4 mt-6">
+        <div class="container mx-auto px-4 text-center text-gray-600 text-sm">
+            <p>&copy; 2025 University of Cebu - College of Computer Studies</p>
+            <p class="text-xs mt-1">Developed by Rafael B. Patiño</p>
+        </div>
+    </footer>
 </body>
 <script>
     //Handle sit-in button dropdown
@@ -269,6 +341,25 @@ $conn->close();
             setTimeout(() => alertBox.remove(), 500);
         }
     }, 3000); // Hide after 3 seconds
+
+    document.getElementById('clearBtn').addEventListener('click', function () {
+        document.getElementById('announcementForm').reset();
+    });
+
+    // Open edit modal and populate fields
+    document.querySelectorAll('.edit-btn').forEach(button => {
+        button.addEventListener('click', function () {
+            document.getElementById('editId').value = this.dataset.id;
+            document.getElementById('editTitle').value = this.dataset.title;
+            document.getElementById('editContent').value = this.dataset.content;
+            document.getElementById('editModal').classList.remove('hidden');
+        });
+    });
+
+    // Close edit modal
+    document.getElementById('closeEditModal').addEventListener('click', function () {
+        document.getElementById('editModal').classList.add('hidden');
+    });
 
     // Open modal
     document.querySelectorAll('.open-search-modal').forEach(button => {

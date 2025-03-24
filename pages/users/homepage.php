@@ -1,6 +1,6 @@
 <?php
 session_start();
-
+include('../../conn/db.php');
 // Check if user is logged in
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     header("Location: ../../login.php");
@@ -9,6 +9,11 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     header("Location: ../admin/homepage.php");
     exit();
 }
+
+// Call all announcements from the database
+$sql = "SELECT * FROM announcements ORDER BY created_at DESC";
+$result = mysqli_query($conn, $sql);
+$announcements = mysqli_fetch_all($result, MYSQLI_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -161,31 +166,19 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
             <div class="bg-white rounded-lg border border-gray-200 shadow-custom hover:shadow-custom-hover transition-shadow duration-300">
                 <div class="border-b border-gray-200 p-4 flex justify-between items-center">
                     <h2 class="heading-font text-lg font-semibold text-gray-800">Announcements</h2>
-                    <span class="bg-primary/10 text-primary text-xs font-medium px-2 py-1 rounded-full">3 New</span>
                 </div>
                 <div class="p-4">
                     <div class="space-y-4 max-h-[380px] overflow-y-auto pr-2">
-                        <div class="border-l-4 border-primary bg-blue-50 p-4 rounded-r-lg">
-                            <div class="flex justify-between items-center mb-2">
-                                <h4 class="font-medium">CCS Admin</h4>
-                                <span class="text-xs text-gray-500">Feb 25, 2025</span>
+                        <!-- Display all announcements -->
+                        <?php foreach ($announcements as $announcement): ?>
+                            <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                                <div class="flex justify-between items-center mb-2">
+                                    <h4 class="font-medium"><?php echo htmlspecialchars($announcement['title']); ?></h4>
+                                    <span class="text-xs text-gray-500"><?php echo date('M d, Y', strtotime($announcement['created_at'])); ?></span>
+                                </div>
+                                <p class="text-gray-700"><?php echo htmlspecialchars($announcement['content']); ?></p>
                             </div>
-                            <p class="text-gray-700">UC did it again.</p>
-                        </div>
-                        <div class="border-l-4 border-primary bg-blue-50 p-4 rounded-r-lg">
-                            <div class="flex justify-between items-center mb-2">
-                                <h4 class="font-medium">CCS Admin</h4>
-                                <span class="text-xs text-gray-500">Feb 3, 2025</span>
-                            </div>
-                            <p class="text-gray-700">The College of Computer Studies will open the registration of students for the Sit-in privilege starting tomorrow. Thank you! Lab Supervisor</p>
-                        </div>
-                        <div class="border-l-4 border-gray-300 bg-gray-50 p-4 rounded-r-lg">
-                            <div class="flex justify-between items-center mb-2">
-                                <h4 class="font-medium">CCS Admin</h4>
-                                <span class="text-xs text-gray-500">May 8, 2024</span>
-                            </div>
-                            <p class="text-gray-700">Important Announcement: We are excited to announce the launch of our new website! 🎉 Explore our latest products and services now!</p>
-                        </div>
+                        <?php endforeach; ?>
                     </div>
                 </div>
             </div>
@@ -340,4 +333,23 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
         </div>
     </footer>
 </body>
+<script>
+    // View complete laboratory protocols
+    document.getElementById('view-protocols-btn').addEventListener('click', function() {
+        let protocols = document.getElementById('complete-protocols');
+        let protocolsText = document.getElementById('protocols-text');
+        let protocolsIcon = document.getElementById('protocols-icon');
+        if (protocols.style.display === 'none') {
+            protocols.style.display = 'block';
+            protocolsText.textContent = 'Hide complete laboratory protocols';
+            protocolsIcon.classList.remove('fa-chevron-down');
+            protocolsIcon.classList.add('fa-chevron-up');
+        } else {
+            protocols.style.display = 'none';
+            protocolsText.textContent = 'View complete laboratory protocols';
+            protocolsIcon.classList.remove('fa-chevron-up');
+            protocolsIcon.classList.add('fa-chevron-down');
+        }
+    });
+</script>
 </html>

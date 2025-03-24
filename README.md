@@ -1,3 +1,3 @@
 # Sit-in-Monitoring-System
 
-fix the announcement panel refer to d
+Sit in the students

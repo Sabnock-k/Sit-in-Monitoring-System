@@ -45,6 +45,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_announcement']
             $success_message = "Announcement created successfully!";
             // Clear form data
             $_POST = array();
+
+            // Refresh the announcements list
+            $sql = "SELECT * FROM announcements ORDER BY created_at DESC";
+            $result = mysqli_query($conn, $sql);
+            $announcements = mysqli_fetch_all($result, MYSQLI_ASSOC);
         } else {
             $error_message = "Error: " . $conn->error;
         }
@@ -52,6 +57,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_announcement']
 }
 
 // Edit announcement form
+$edit_success_message = '';
+$edit_error_message = '';
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_announcement'])) {
     // Validate and sanitize input
     $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
@@ -60,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_announcement']))
 
     // Check for empty fields
     if ($id <= 0 || empty($title) || empty($content)) {
-        $error_message = "All fields are required.";
+        $edit_error_message = "All fields are required.";
     } else {
         // Prepare and execute the query securely using prepared statements
         $stmt = $conn->prepare("UPDATE announcements SET title = ?, content = ? WHERE id = ?");
@@ -68,7 +76,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_announcement']))
             $stmt->bind_param("ssi", $title, $content, $id);
             
             if ($stmt->execute()) {
-                $success_message = "Announcement updated successfully!";
+                $edit_success_message = "Announcement updated successfully!";
+                $_POST = array();
                 $stmt->close();
                 
                 // Refresh the announcements list
@@ -286,9 +295,21 @@ $conn->close();
                 </div>
 
                 <!-- Edit Announcement Modal -->
-                <div id="editModal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                <div id="editModal" class="<?php echo (!empty($edit_success_message) || !empty($edit_error_message)) ? '' : 'hidden'; ?> fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
                     <div class="bg-white p-6 rounded-lg shadow-lg w-96">
                         <h3 class="text-lg font-semibold mb-4">Edit Announcement</h3>
+                        <!-- Display message -->
+                        <?php if(!empty($edit_success_message)): ?>
+                            <div id="alert-box" class="bg-green-100 border-l-4 border-green-500 text-green-700 p-3 mb-4 rounded text-sm" role="alert">
+                                <p><i class="fas fa-check-circle mr-1"></i> <?php echo $edit_success_message; ?></p>
+                            </div>
+                        <?php endif; ?>
+                        
+                        <?php if(!empty($edit_error_message)): ?>
+                            <div id="alert-box" class="bg-red-100 border-l-4 border-red-500 text-red-700 p-3 mb-4 rounded text-sm" role="alert">
+                                <p><i class="fas fa-exclamation-circle mr-1"></i> <?php echo $edit_error_message; ?></p>
+                            </div>
+                        <?php endif; ?>
                         <form id="editAnnouncementForm" method="POST" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
                             <input type="hidden" id="editId" name="id">
                             <div class="mb-4">
@@ -303,7 +324,7 @@ $conn->close();
                                 <button type="button" id="closeEditModal" class="px-3 py-1.5 text-sm bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition">Cancel</button>
                                 <button type="submit" name="edit_announcement" class="px-3 py-1.5 text-sm bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">Save Changes</button>
                             </div>
-                        </form>
+                    </form>
                     </div>
                 </div>
             </div>
@@ -356,12 +377,20 @@ $conn->close();
         });
     });
 
+    // Success edit modal
+    <?php if(!empty($edit_success_message)): ?>
+        setTimeout(() => {
+            document.getElementById('editModal').classList.add('hidden');
+            document.getElementById('hideIfMessage').classList.add('hidden');
+        }, 3000); // Close modal after 3 seconds
+    <?php endif; ?>
+
     // Close edit modal
     document.getElementById('closeEditModal').addEventListener('click', function () {
         document.getElementById('editModal').classList.add('hidden');
     });
 
-    // Open modal
+    // Open search modal
     document.querySelectorAll('.open-search-modal').forEach(button => {
         button.addEventListener('click', function(e) {
             e.preventDefault();

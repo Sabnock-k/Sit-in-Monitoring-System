@@ -1,6 +1,7 @@
 <?php
 session_start();
 include('../../conn/db.php');
+include('modals/search.php');
 
 // Check if user is logged in
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
@@ -138,7 +139,7 @@ $conn->close();
                     </div>
                     
                     <div class="relative group">
-                        <a href="#" class="px-3 py-2 rounded-md transition duration-300 flex items-center text-gray-700 hover:bg-gray-100">
+                        <a href="#" class="open-search-modal px-3 py-2 rounded-md transition duration-300 flex items-center text-gray-700 hover:bg-gray-100">
                             <i class="fas fa-search mr-2"></i><span>Search</span>
                         </a>
                     </div>
@@ -244,7 +245,6 @@ $conn->close();
         </div>
     </div>
 </body>
-
 <script>
     //Handle sit-in button dropdown
     const sitInButton = document.querySelector('.dropdown-button');
@@ -269,5 +269,23 @@ $conn->close();
             setTimeout(() => alertBox.remove(), 500);
         }
     }, 3000); // Hide after 3 seconds
+
+    // Open modal
+    document.querySelectorAll('.open-search-modal').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            searchModal.classList.remove('hidden');
+        });
+    });
+
+    // Add this to the existing script section
+    // Close search modal
+    document.getElementById('closeSearchModal').addEventListener('click', function() {
+        document.getElementById('searchModal').classList.add('hidden');
+    });
+
+    // Define searchModal variable for use in the existing code
+    const searchModal = document.getElementById('searchModal');
+
 </script>
 </html>

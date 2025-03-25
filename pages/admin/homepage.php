@@ -94,6 +94,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_announcement']))
     }
 }
 
+// Delete an announcement
+$delete_success_message = '';
+$delete_error_message = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_announcement'])) {
+    $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
+
+    if ($id > 0) {
+        $stmt = $conn->prepare("DELETE FROM announcements WHERE id = ?");
+        if ($stmt) {
+            $stmt->bind_param("i", $id);
+            
+            if ($stmt->execute()) {
+                $delete_success_message = "Announcement deleted successfully!";
+                $_POST = array();
+
+                // Refresh the announcements list
+                $sql = "SELECT * FROM announcements ORDER BY created_at DESC";
+                $result = mysqli_query($conn, $sql);
+                $announcements = mysqli_fetch_all($result, MYSQLI_ASSOC);
+            } else {
+                $delete_error_message = "Error deleting announcement: " . $stmt->error;
+            }
+            $stmt->close();
+        } else {
+            $delete_error_message = "Database error: " . $conn->error;
+        }
+    }
+}
+
+
 $conn->close();
 ?>
 <!DOCTYPE html>
@@ -270,6 +301,18 @@ $conn->close();
                     </div>
                     <div class="p-4">
                         <div class="space-y-4 max-h-[380px] overflow-y-auto pr-2">
+                            <!-- Display message -->
+                            <?php if(!empty($delete_success_message)): ?>
+                                <div id="alert-box" class="bg-green-100 border-l-4 border-green-500 text-green-700 p-3 mb-4 rounded text-sm" role="alert">
+                                    <p><i class="fas fa-check-circle mr-1"></i> <?php echo $delete_success_message; ?></p>
+                                </div>
+                            <?php endif; ?>
+                            
+                            <?php if(!empty($delete_error_message)): ?>
+                                <div id="alert-box" class="bg-red-100 border-l-4 border-red-500 text-red-700 p-3 mb-4 rounded text-sm" role="alert">
+                                    <p><i class="fas fa-exclamation-circle mr-1"></i> <?php echo $delete_error_message; ?></p>
+                                </div>
+                            <?php endif; ?>
                             <!-- Display all announcements -->
                             <?php foreach ($announcements as $announcement): ?>
                                 <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
@@ -285,6 +328,12 @@ $conn->close();
                                                 data-content="<?php echo htmlspecialchars($announcement['content']); ?>">
                                                 Edit
                                             </button>
+                                            <form method="POST" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" class="inline">
+                                                <input type="hidden" name="id" value="<?php echo $announcement['id']; ?>">
+                                                <button type="submit" name="delete_announcement" class="del-btn px-2 py-1 text-xs bg-red-500 text-white rounded-md hover:bg-red-600 transition duration-200">
+                                                    Delete
+                                                </button>
+                                            </form>
                                         </div>
                                     </div>
                                     <p class="text-gray-700"><?php echo htmlspecialchars($announcement['content']); ?></p>
@@ -324,7 +373,7 @@ $conn->close();
                                 <button type="button" id="closeEditModal" class="px-3 py-1.5 text-sm bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition">Cancel</button>
                                 <button type="submit" name="edit_announcement" class="px-3 py-1.5 text-sm bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">Save Changes</button>
                             </div>
-                    </form>
+                        </form>
                     </div>
                 </div>
             </div>

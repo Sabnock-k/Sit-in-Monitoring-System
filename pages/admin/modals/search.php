@@ -1,10 +1,14 @@
 <?php
 // Include database connection
 include('../../conn/db.php');
+include('sit-inStudent.php');   
 
 // Initialize search results variable
 $searchResults = '';
+$searchQuery = ''; // Initialize searchQuery to an empty string
+$students = null; // Initialize students to null
 
+// Only process search if explicitly submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['searchQuery'])) {
     // Sanitize search input
     $searchQuery = $conn->real_escape_string(trim($_POST['searchQuery']));
@@ -31,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['searchQuery'])) {
             $students = [];
         }
     } else {
-        $students = null;
+        $students = [];
     }
 }
 ?>
@@ -40,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['searchQuery'])) {
 <div id="searchModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
     <div class="bg-white rounded-lg shadow-lg w-full max-w-2xl mx-4 overflow-hidden">
         <!-- Modal Header -->
-        <div class="bg-primary text-white px-6 py-4 flex justify-between items-center">
+        <div class="bg-blue-500 text-white px-6 py-4 flex justify-between items-center">
             <h3 class="text-lg font-semibold heading-font">Search Student</h3>
             <button id="closeSearchModal" class="text-white hover:text-gray-200 focus:outline-none">
                 <i class="fas fa-times"></i>
@@ -54,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['searchQuery'])) {
                     <div class="flex items-center border border-gray-300 rounded-md overflow-hidden">
                         <input type="text" id="studentSearch" name="searchQuery" placeholder="Search"
                                class="w-full px-4 py-2 focus:outline-none">
-                        <button type="submit" id="searchButton" class="bg-primary text-white px-4 py-2 flex items-center">
+                        <button type="submit" id="searchButton" class="bg-blue-500 text-white px-4 py-2 flex items-center">
                             <i class="fas fa-search mr-2"></i> Search
                         </button>
                     </div>
@@ -79,7 +83,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['searchQuery'])) {
                                         <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
                                         <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course</th>
                                         <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Year</th>
-                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-200">
@@ -90,21 +93,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['searchQuery'])) {
                                             $fullName .= ' ' . $row['midname'][0] . '.';
                                         }
                                         ?>
-                                        <tr class="hover:bg-gray-50">
+                                        <tr class="hover:bg-gray-50 cursor-pointer" onclick="selectStudent('<?= htmlspecialchars($row['idno']) ?>', '<?= htmlspecialchars($fullName) ?>', '<?= htmlspecialchars($row['course']) ?>', '<?= htmlspecialchars($row['year_level']) ?>')"
+                                            data-idno="<?= htmlspecialchars($row['idno']) ?>"
+                                            data-name="<?= htmlspecialchars($fullName) ?>"
+                                            data-course="<?= htmlspecialchars($row['course']) ?>"
+                                            data-year="<?= htmlspecialchars($row['year_level']) ?>">
                                             <td class="px-4 py-2 text-sm"><?= htmlspecialchars($row['idno']) ?></td>
                                             <td class="px-4 py-2 text-sm"><?= htmlspecialchars($fullName) ?></td>
                                             <td class="px-4 py-2 text-sm"><?= htmlspecialchars($row['course']) ?></td>
                                             <td class="px-4 py-2 text-sm"><?= htmlspecialchars($row['year_level']) ?></td>
-                                            <td class="px-4 py-2 text-sm">
-                                                <div class="flex space-x-2">
-                                                    <a href="view_student.php?id=<?= $row['id'] ?>" class="text-blue-600 hover:text-blue-800" title="View Details">
-                                                        <i class="fas fa-eye"></i>
-                                                    </a>
-                                                    <a href="edit_student.php?id=<?= $row['id'] ?>" class="text-green-600 hover:text-green-800" title="Edit">
-                                                        <i class="fas fa-edit"></i>
-                                                    </a>
-                                                </div>
-                                            </td>
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>
@@ -131,6 +128,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['searchQuery'])) {
 </div>
 
 <script>
+// Open search modal with reset
+document.querySelectorAll('.open-search-modal').forEach(button => {
+    button.addEventListener('click', function() {
+        // Reset the form and search results
+        document.getElementById('studentSearch').value = '';
+        document.getElementById('searchResults').innerHTML = '<div class="bg-blue-50 p-4 rounded-md text-center"><p class="text-blue-700"><i class="fas fa-search mr-2"></i>Search for students by ID, name, or course</p></div>';
+        document.getElementById('searchModal').classList.remove('hidden');
+    });
+});
+
 // Submit form without page reload using AJAX
 document.getElementById('searchForm').addEventListener('submit', function(e) {
     e.preventDefault();
@@ -175,4 +182,12 @@ document.getElementById('closeSearchModal').addEventListener('click', function()
     document.getElementById('studentSearch').value = '';
     document.getElementById('searchResults').innerHTML = '<div class="bg-blue-50 p-4 rounded-md text-center"><p class="text-blue-700"><i class="fas fa-search mr-2"></i>Search for students by ID, name, or course</p></div>';
 });
+
+function selectStudent(idno, name, course, year) {
+    // Close the search modal
+    document.getElementById('searchModal').classList.add('hidden');
+    
+    // Call the function in sit-inStudent.php to populate the form and open the modal
+    populateSitInForm(idno, name, course, year);
+}
 </script>

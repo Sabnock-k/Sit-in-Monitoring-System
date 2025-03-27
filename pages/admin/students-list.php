@@ -110,7 +110,7 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
                     </a>
                     
                     <div class="relative group">
-                        <a href="student-list" class="px-3 py-2 rounded-md transition duration-300 flex items-center text-gray-700 hover:bg-gray-100">
+                        <a href="students-list.php" class="px-3 py-2 rounded-md transition duration-300 flex items-center text-gray-700 hover:bg-gray-100">
                             <i class="fas fa-users mr-2"></i><span>Students</span>
                         </a>
                     </div>
@@ -159,7 +159,7 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
             <!-- Active Sit-ins List -->
             <div class="md:col-span-2 bg-white rounded-lg border border-gray-300 shadow-md hover:shadow-xl transition-shadow duration-300">
                 <div class="border-b border-gray-200 p-4 flex justify-between items-center">
-                    <h2 class="heading-font text-lg font-semibold text-gray-800">Sit-in Records</h2>
+                    <h2 class="heading-font text-lg font-semibold text-gray-800">Student List</h2>
                     <div class="flex space-x-2">
                         <button id="refreshBtn" class="px-3 py-1.5 text-sm bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 focus:outline-none transition duration-200 flex items-center">
                             <i class="fas fa-sync-alt mr-1"></i> Refresh

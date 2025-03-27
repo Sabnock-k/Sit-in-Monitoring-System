@@ -113,6 +113,7 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
                         <a href="students-list.php" class="px-3 py-2 rounded-md transition duration-300 flex items-center text-gray-700 hover:bg-gray-100">
                             <i class="fas fa-users mr-2"></i><span>Students</span>
                         </a>
+                        asd
                     </div>
                     
                     <div class="relative group">

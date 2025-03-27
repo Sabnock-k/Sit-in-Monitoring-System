@@ -9,6 +9,16 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     header("Location: ../admin/homepage.php");
     exit();
 }
+// Get student sessionno
+$sql = "SELECT sessionno FROM users WHERE username = ?";
+$updated_sessionno = $conn->prepare($sql);
+$updated_sessionno->bind_param("s", $_SESSION['username']);
+$updated_sessionno->execute();
+$result = $updated_sessionno->get_result();
+if ($row = $result->fetch_assoc()) {
+    $sessionno = $row['sessionno'];
+}
+$updated_sessionno->close();
 
 // Call all announcements from the database
 $sql = "SELECT * FROM announcements ORDER BY created_at DESC";
@@ -141,7 +151,7 @@ $announcements = mysqli_fetch_all($result, MYSQLI_ASSOC);
                     <div class="bg-blue-50 rounded-lg p-4 mb-4">
                         <div class="flex justify-between items-center">
                             <span class="text-gray-700">Available Sessions:</span>
-                            <span class="font-semibold text-primary text-lg"><?php echo $_SESSION['sessionno']; ?></span>
+                            <span class="font-semibold text-primary text-lg"><?php echo htmlspecialchars($sessionno ?? 'N/A'); ?></span>
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-4">

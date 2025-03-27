@@ -200,7 +200,7 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
                                             <div class="text-sm text-gray-900"><?php echo htmlspecialchars($sit_in['lastname']); ?></div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900"><?php echo htmlspecialchars($sit_in['midname']); ?></div>
+                                            <div class="text-sm text-gray-900"><?php echo htmlspecialchars(!empty($sit_in['midname']) ? $sit_in['midname'] : "N/A"); ?></div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="text-sm text-gray-900"><?php echo htmlspecialchars($sit_in['course']); ?></div>
@@ -219,7 +219,9 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
                     </div>
                 </div>
             </div>
-    
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer class="bg-white border-t border-gray-200 py-4 mt-6">
         <div class="container mx-auto px-4 text-center text-gray-600 text-sm">
@@ -227,7 +229,7 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
             <p class="text-xs mt-1">Developed by Rafael B. Patiño</p>
         </div>
     </footer>
-
+</body>
     <script>
         // Handle sit-in button dropdown
         const sitInButton = document.querySelector('.dropdown-button');
@@ -263,5 +265,4 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
             alert('Export functionality will be implemented here');
         });
     </script>
-</body>
 </html>

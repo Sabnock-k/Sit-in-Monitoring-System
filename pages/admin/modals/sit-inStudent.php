@@ -14,27 +14,31 @@ $success_message = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['registerSitIn'])) {
     // Sanitize and validate inputs
     $studentId = $conn->real_escape_string($_POST['studentId'] ?? '');
+    $student_name = $conn->real_escape_string($_POST['studentName'] ?? '');
+    $student_curse_year = $conn->real_escape_string($_POST['studentCourseYear'] ?? '');
     $laboratory = $conn->real_escape_string($_POST['laboratory'] ?? '');
     $purpose = $conn->real_escape_string($_POST['purpose'] ?? '');
-    $date = date('Y-m-d');
+    $check_in_date = date('Y-m-d');
+    $check_in_time = date('H:i:s');
 
     // Validate form inputs
     if (empty($studentId) || empty($laboratory) || empty($purpose)) {
         $error_message = "Please fill in all required fields.";
     } else {
-        // Check if student has already registered a sit-in for today
-        $check_sql = "SELECT * FROM sit_ins WHERE student_id = '$studentId' AND date = '$date'";
+        // Check if student has an ongoing sit-in
+        $check_sql = "SELECT * FROM sit_ins WHERE student_id = '$studentId' AND check_out_time = NULL";
         $check_result = $conn->query($check_sql);
         
         if ($check_result->num_rows > 0) {
-            $error_message = "This student has already registered a sit-in today.";
+            $error_message = "This student has student has an ongoing sit-in. Please check out the student first.";
         } else {
             // Insert into database
-            $sql = "INSERT INTO sit_ins (student_id, laboratory, purpose, date) 
-                    VALUES ('$studentId', '$laboratory', '$purpose', '$date')";
+            $sql = "INSERT INTO sit_ins (student_id, laboratory, purpose, check_in_date, check_in_time) 
+                    VALUES ('$studentId', '$laboratory', '$purpose', '$check_in_date', '$check_in_time')";
             
             if ($conn->query($sql)) {
                 $success_message = "Student sit-in registered successfully!";
+                // Update student's status session number
             } else {
                 $error_message = "Error registering sit-in: " . $conn->error;
             }
@@ -92,12 +96,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['registerSitIn'])) {
                 
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2">Student Name:</label>
-                    <input type="text" id="studentName" class="bg-gray-100 p-2 w-full rounded border border-gray-300 mb-2" readonly value="<?= isset($_POST['studentName']) ? htmlspecialchars($_POST['studentName']) : '' ?>">
+                    <input type="text" id="studentName" name="studentName" class="bg-gray-100 p-2 w-full rounded border border-gray-300 mb-2" readonly value="<?= isset($student_name) ? htmlspecialchars($student_name) : '' ?>">
                 </div>
                 
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2">Course & Year:</label>
-                    <input type="text" id="studentCourseYear" class="bg-gray-100 p-2 w-full rounded border border-gray-300 mb-2" readonly value="<?= isset($_POST['studentCourseYear']) ? htmlspecialchars($_POST['studentCourseYear']) : '' ?>">
+                    <input type="text" id="studentCourseYear" name="studentCourseYear" class="bg-gray-100 p-2 w-full rounded border border-gray-300 mb-2" readonly value="<?= isset($student_curse_year) ? htmlspecialchars($student_curse_year) : '' ?>">
                 </div>
                 
                 <!-- Laboratory Selection -->

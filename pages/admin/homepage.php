@@ -17,6 +17,13 @@ $sql = "SELECT COUNT(*) AS total_students FROM users";
 $result = $conn->query($sql);
 $total_students = $result->fetch_assoc()['total_students'];
 
+// Get all number of active sit-ins
+$today = date('Y-m-d');
+$sql = "SELECT COUNT(*) AS count FROM sit_ins WHERE check_in_date = '$today' AND check_out_time IS NULL";
+$result = $conn->query($sql);
+$active_sit_ins = $result->fetch_assoc()['count'];
+
+
 // Call all announcements from the database
 $sql = "SELECT * FROM announcements ORDER BY created_at DESC";
 $result = mysqli_query($conn, $sql);
@@ -136,6 +143,25 @@ $conn->close();
     <title>Dashboard - CCS Sit-in Monitoring</title>
     <!-- Add Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0056b3',
+                        secondary: '#343a40',
+                        accent: '#ffc107',
+                        light: '#f8f9fa',
+                        dark: '#212529',
+                    },
+                    boxShadow: {
+                        'custom': '0 4px 6px rgba(0, 0, 0, 0.1)',
+                        'custom-hover': '0 10px 15px rgba(0, 0, 0, 0.1)',
+                    }
+                },
+            },
+        }
+    </script>
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="../../public/css/all.css">
     <style>
@@ -190,7 +216,7 @@ $conn->close();
                     </a>
                     
                     <div class="relative group">
-                        <a href="#" class="px-3 py-2 rounded-md transition duration-300 flex items-center text-gray-700 hover:bg-gray-100">
+                        <a href="students-list.php" class="px-3 py-2 rounded-md transition duration-300 flex items-center text-gray-700 hover:bg-gray-100">
                             <i class="fas fa-users mr-2"></i><span>Students</span>
                         </a>
                     </div>
@@ -207,8 +233,8 @@ $conn->close();
                             <i class="icon fas fa-chevron-down ml-1 text-xs"></i>
                         </button>
                         <div class="dropdown-content absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden">
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Manage Sit-in</a>
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">View Records</a>
+                            <a href="sit-inManage.php" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Manage Sit-in</a>
+                            <a href="sit-inRecords.php" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">View Records</a>
                             <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Reports</a>
                         </div>
                     </div>
@@ -248,7 +274,7 @@ $conn->close();
                         </div>
                         <div class="bg-green-50 p-4 rounded-lg">
                             <h3 class="font-medium text-green-600">Active Sit-ins</h3>
-                            <p class="text-2xl font-bold">0</p>
+                            <p class="text-2xl font-bold"><?php echo htmlspecialchars($active_sit_ins)?></p>
                         </div>
                     </div>
                 </div>

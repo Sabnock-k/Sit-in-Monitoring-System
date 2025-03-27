@@ -42,18 +42,21 @@ CREATE TABLE `announcements` (
 --
 
 CREATE TABLE `sit_ins` (
-  `student_id` varchar(100) NOT NULL,
-  `laboratory` varchar(250) NOT NULL,
-  `purpose` varchar(255) NOT NULL,
-  `date` date NOT NULL
+  `student_id` VARCHAR(100) NOT NULL,
+  `laboratory` VARCHAR(250) NOT NULL,
+  `purpose` VARCHAR(255) NOT NULL,
+  `check_in_date` DATE NOT NULL,
+  `check_in_time` TIME NOT NULL,
+  `check_out_time` TIME DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 
 --
 -- Dumping data for table `sit_ins`
 --
 
-INSERT INTO `sit_ins` (`student_id`, `laboratory`, `purpose`, `date`) VALUES
-('22652424', '524', 'C# Programming', '2025-03-25');
+INSERT INTO `sit_ins` (`student_id`, `laboratory`, `purpose`, `check_in_date`, `check_in_time`, `check_out_time`) VALUES
+('22652424', '524', 'C# Programming', '2025-03-25', '10:30:00', '12:45:00');
 
 -- --------------------------------------------------------
 
@@ -72,8 +75,8 @@ CREATE TABLE `users` (
   `email` varchar(255) NOT NULL,
   `address` varchar(255) NOT NULL,
   `username` varchar(50) NOT NULL,
-  `password_hash` varchar(255) NOT NULL,
   `sessionno` int(11) DEFAULT NULL,
+  `password_hash` varchar(255) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -81,8 +84,8 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `idno`, `lastname`, `firstname`, `midname`, `course`, `year_level`, `email`, `address`, `username`, `password_hash`, `sessionno`, `created_at`) VALUES
-(4, '22652424', 'Patino', 'Rafael', 'Bacarisas', 'Information Technology', 'Third year', 'sit-in@gmail.com', 'UC MAIN', 'Sabnock', '$2y$10$oDLjVjrpeWJ4k0P4PD743u9hEfMD7Jfi.l7BR3havpbmceTp7xQwe', 30, '2025-03-06 03:07:18');
+INSERT INTO `users` (`id`, `idno`, `lastname`, `firstname`, `midname`, `course`, `year_level`, `email`, `address`, `username`, `sessionno`, `password_hash`, `created_at`) VALUES
+(4, '22652424', 'Patino', 'Rafael', 'Bacarisas', 'Information Technology', 'Third year', 'sit-in@gmail.com', 'UC MAIN', 'Sabnock', 29, '$2y$10$oDLjVjrpeWJ4k0P4PD743u9hEfMD7Jfi.l7BR3havpbmceTp7xQwe', '2025-03-06 03:07:18');
 
 --
 -- Indexes for dumped tables

@@ -141,6 +141,8 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - CCS Sit-in Monitoring</title>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="../../public/css/all.css">
     <!-- Add Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -162,8 +164,6 @@ $conn->close();
             },
         }
     </script>
-    <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="../../public/css/all.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap');
         
@@ -197,7 +197,7 @@ $conn->close();
     </style>
 </head>
 
-<body>
+<body class="min-h-screen flex flex-col">
     <nav class="bg-white border-b border-gray-200 fixed w-full z-50 shadow-sm">
         <div class="container mx-auto px-4">
             <div class="flex justify-between items-center py-3">
@@ -216,37 +216,37 @@ $conn->close();
                     </a>
                     
                     <div class="relative group">
-                        <a href="students-list.php" class="px-3 py-2 rounded-md transition duration-300 flex items-center text-gray-700 hover:bg-gray-100">
+                        <a href="students-list.php" class="px-3 py-2 rounded-md transition duration-300 flex items-center text-secondary hover:bg-gray-100">
                             <i class="fas fa-users mr-2"></i><span>Students</span>
                         </a>
                     </div>
                     
                     <div class="relative group">
-                        <a href="#" class="open-search-modal px-3 py-2 rounded-md transition duration-300 flex items-center text-gray-700 hover:bg-gray-100">
+                        <a href="#" class="open-search-modal px-3 py-2 rounded-md transition duration-300 flex items-center text-secondary hover:bg-gray-100">
                             <i class="fas fa-search mr-2"></i><span>Search</span>
                         </a>
                     </div>
                     
                     <div class="relative group">
-                        <button class="dropdown-button px-3 py-2 rounded-md transition duration-300 flex items-center text-gray-700 hover:bg-gray-100">
+                        <button class="dropdown-button px-3 py-2 rounded-md transition duration-300 flex items-center text-secondary hover:bg-gray-100">
                             <i class="fas fa-clipboard-list mr-2"></i><span>Sit-in</span>
                             <i class="icon fas fa-chevron-down ml-1 text-xs"></i>
                         </button>
                         <div class="dropdown-content absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden">
-                            <a href="sit-inManage.php" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Manage Sit-in</a>
-                            <a href="sit-inRecords.php" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">View Records</a>
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Reports</a>
+                            <a href="sit-inManage.php" class="block px-4 py-2 text-sm text-secondary hover:bg-gray-100">Manage Sit-in</a>
+                            <a href="sit-inRecords.php" class="block px-4 py-2 text-sm text-secondary hover:bg-gray-100">View Records</a>
+                            <a href="#" class="block px-4 py-2 text-sm text-secondary hover:bg-gray-100">Reports</a>
                         </div>
                     </div>
                     
                     <div class="relative group">
-                        <button class="px-3 py-2 rounded-md transition duration-300 flex items-center text-gray-700 hover:bg-gray-100">
+                        <button class="px-3 py-2 rounded-md transition duration-300 flex items-center text-secondary hover:bg-gray-100">
                             <i class="fas fa-calendar-alt mr-2"></i><span>Reservation</span>
                         </button>
                     </div>
                     
                     <div class="relative group">
-                        <button class="px-3 py-2 rounded-md transition duration-300 flex items-center text-gray-700 hover:bg-gray-100">
+                        <button class="px-3 py-2 rounded-md transition duration-300 flex items-center text-secondary hover:bg-gray-100">
                             <i class="fas fa-comment-alt mr-2"></i><span>Feedback</span>
                         </button>
                     </div>
@@ -260,7 +260,7 @@ $conn->close();
     </nav>
 
     <!-- Main Content Area -->
-    <div class="pt-16 px-4 md:px-6 lg:px-8 container mx-auto max-w-6xl">
+    <div class="container mx-auto px-4 pt-24 pb-8 flex-grow">
         <div class="py-6">
             <div class="grid grid-cols-1 grid-rows-0 gap-4 mb-6">
                 <div class="bg-white rounded-lg border border-gray-300 shadow-md hover:shadow-xl transition-shadow duration-300 p-4">
@@ -300,19 +300,19 @@ $conn->close();
                     <form id="announcementForm" method="POST" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" class="space-y-4">
                         <!-- Title Field -->
                         <div>
-                            <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Title <span class="text-red-500">*</span></label>
+                            <label for="title" class="block text-sm font-medium text-secondary mb-1">Title <span class="text-red-500">*</span></label>
                             <input type="text" id="title" name="title" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-primary focus:border-primary" value="<?php echo isset($_POST['title']) ? htmlspecialchars($_POST['title']) : ''; ?>">
                         </div>
                         
                         <!-- Content Field -->
                         <div>
-                            <label for="content" class="block text-sm font-medium text-gray-700 mb-1">Content <span class="text-red-500">*</span></label>
+                            <label for="content" class="block text-sm font-medium text-secondary mb-1">Content <span class="text-red-500">*</span></label>
                             <textarea id="content" name="content" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-primary focus:border-primary" rows="4"><?php echo isset($_POST['content']) ? htmlspecialchars($_POST['content']) : ''; ?></textarea>
                         </div>
 
                         <!-- Submit Button -->
                         <div class="flex justify-end space-x-2">
-                            <button type="button" id="clearBtn" class="px-3 py-1.5 text-sm border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition duration-200">
+                            <button type="button" id="clearBtn" class="px-3 py-1.5 text-sm border border-gray-300 rounded-md text-secondary bg-white hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition duration-200">
                                 Clear
                             </button>
                             <button type="submit" name="create_announcement" class="px-3 py-1.5 text-sm bg-blue-500 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition duration-200">
@@ -362,7 +362,7 @@ $conn->close();
                                             </form>
                                         </div>
                                     </div>
-                                    <p class="text-gray-700"><?php echo htmlspecialchars($announcement['content']); ?></p>
+                                    <p class="text-secondary"><?php echo htmlspecialchars($announcement['content']); ?></p>
                                 </div>
                             <?php endforeach; ?>
                         </div>
@@ -388,15 +388,15 @@ $conn->close();
                         <form id="editAnnouncementForm" method="POST" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
                             <input type="hidden" id="editId" name="id">
                             <div class="mb-4">
-                                <label class="block text-sm font-medium text-gray-700">Title</label>
+                                <label class="block text-sm font-medium text-secondary">Title</label>
                                 <input type="text" id="editTitle" name="title" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary">
                             </div>
                             <div class="mb-4">
-                                <label class="block text-sm font-medium text-gray-700">Content</label>
+                                <label class="block text-sm font-medium text-secondary">Content</label>
                                 <textarea id="editContent" name="content" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary" rows="4"></textarea>
                             </div>
                             <div class="flex justify-end space-x-2">
-                                <button type="button" id="closeEditModal" class="px-3 py-1.5 text-sm bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition">Cancel</button>
+                                <button type="button" id="closeEditModal" class="px-3 py-1.5 text-sm bg-gray-300 text-secondary rounded-md hover:bg-gray-400 transition">Cancel</button>
                                 <button type="submit" name="edit_announcement" class="px-3 py-1.5 text-sm bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">Save Changes</button>
                             </div>
                         </form>
@@ -405,6 +405,7 @@ $conn->close();
             </div>
         </div>
     </div>
+
     <!-- Footer -->
     <footer class="bg-white border-t border-gray-200 py-4 mt-6">
         <div class="container mx-auto px-4 text-center text-gray-600 text-sm">

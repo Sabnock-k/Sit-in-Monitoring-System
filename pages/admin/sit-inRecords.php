@@ -36,10 +36,10 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Sit-in - CCS Sit-in Monitoring</title>
-    <!-- Add Tailwind CSS via CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="../../public/css/all.css">
+    <!-- Add Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -92,7 +92,7 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
     </style>
 </head>
 
-<body>
+<body class="min-h-screen flex flex-col">
     <nav class="bg-white border-b border-gray-200 fixed w-full z-50 shadow-sm">
         <div class="container mx-auto px-4">
             <div class="flex justify-between items-center py-3">
@@ -106,18 +106,18 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
                 
                 <!-- Desktop Navigation -->
                 <div class="hidden md:flex space-x-2">
-                    <a href="homepage.php" class="px-3 py-2 rounded-md transition duration-300 flex items-center text-gray-700 hover:bg-gray-100">
+                    <a href="homepage.php" class="px-3 py-2 rounded-md transition duration-300 flex items-center text-secondary hover:bg-gray-100">
                         <i class="fas fa-home mr-2"></i><span>Dashboard</span>
                     </a>
                     
                     <div class="relative group">
-                        <a href="students-list.php" class="px-3 py-2 rounded-md transition duration-300 flex items-center text-gray-700 hover:bg-gray-100">
+                        <a href="students-list.php" class="px-3 py-2 rounded-md transition duration-300 flex items-center text-secondary hover:bg-gray-100">
                             <i class="fas fa-users mr-2"></i><span>Students</span>
                         </a>
                     </div>
                     
                     <div class="relative group">
-                        <a href="#" class="open-search-modal px-3 py-2 rounded-md transition duration-300 flex items-center text-gray-700 hover:bg-gray-100">
+                        <a href="#" class="open-search-modal px-3 py-2 rounded-md transition duration-300 flex items-center text-secondary hover:bg-gray-100">
                             <i class="fas fa-search mr-2"></i><span>Search</span>
                         </a>
                     </div>
@@ -128,20 +128,20 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
                             <i class="icon fas fa-chevron-down ml-1 text-xs"></i>
                         </button>
                         <div class="dropdown-content absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden">
-                            <a href="sit-inManage.php" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Manage Sit-in</a>
+                            <a href="sit-inManage.php" class="block px-4 py-2 text-sm text-secondary hover:bg-gray-100">Manage Sit-in</a>
                             <a href="sit-inRecords.php" class="block px-4 py-2 text-sm text-primary bg-blue-50 hover:bg-blue-100">View Records</a>
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Reports</a>
+                            <a href="#" class="block px-4 py-2 text-sm text-secondary hover:bg-gray-100">Reports</a>
                         </div>
                     </div>
                     
                     <div class="relative group">
-                        <button class="px-3 py-2 rounded-md transition duration-300 flex items-center text-gray-700 hover:bg-gray-100">
+                        <button class="px-3 py-2 rounded-md transition duration-300 flex items-center text-secondary hover:bg-gray-100">
                             <i class="fas fa-calendar-alt mr-2"></i><span>Reservation</span>
                         </button>
                     </div>
                     
                     <div class="relative group">
-                        <button class="px-3 py-2 rounded-md transition duration-300 flex items-center text-gray-700 hover:bg-gray-100">
+                        <button class="px-3 py-2 rounded-md transition duration-300 flex items-center text-secondary hover:bg-gray-100">
                             <i class="fas fa-comment-alt mr-2"></i><span>Feedback</span>
                         </button>
                     </div>
@@ -155,7 +155,7 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
     </nav>
 
     <!-- Main Content Area -->
-    <div class="pt-16 px-4 md:px-6 lg:px-8 container mx-auto max-w-6xl">
+    <div class="container mx-auto px-4 pt-24 pb-8 flex-grow">
         <div class="py-6">
             <div class="grid grid-cols-1 grid-rows-0 gap-4 mb-6">
                 <div class="bg-white rounded-lg border border-gray-300 shadow-md hover:shadow-xl transition-shadow duration-300 p-4">
@@ -179,7 +179,7 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
                 <div class="border-b border-gray-200 p-4 flex justify-between items-center">
                     <h2 class="heading-font text-lg font-semibold text-gray-800">Sit-in Records</h2>
                     <div class="flex space-x-2">
-                        <button id="refreshBtn" class="px-3 py-1.5 text-sm bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 focus:outline-none transition duration-200 flex items-center">
+                        <button id="refreshBtn" class="px-3 py-1.5 text-sm bg-gray-100 text-secondary rounded-md hover:bg-gray-200 focus:outline-none transition duration-200 flex items-center">
                             <i class="fas fa-sync-alt mr-1"></i> Refresh
                         </button>
                         <button id="exportBtn" class="px-3 py-1.5 text-sm bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none transition duration-200 flex items-center">
@@ -239,6 +239,8 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
     
     <!-- Footer -->
     <footer class="bg-white border-t border-gray-200 py-4 mt-6">

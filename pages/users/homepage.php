@@ -32,10 +32,10 @@ $announcements = mysqli_fetch_all($result, MYSQLI_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - CCS Sit-in Monitoring</title>
-    <!-- Add Tailwind CSS via CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="../../public/css/all.css">
+    <!-- Add Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -88,7 +88,7 @@ $announcements = mysqli_fetch_all($result, MYSQLI_ASSOC);
     </style>
 </head>
 
-<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col">
     <!-- Navigation -->
     <nav class="bg-white border-b border-gray-200 fixed w-full z-50 shadow-sm">
         <div class="container mx-auto px-4">
@@ -104,15 +104,15 @@ $announcements = mysqli_fetch_all($result, MYSQLI_ASSOC);
                         <i class="fas fa-home mr-2"></i> 
                         <span>Dashboard</span>
                     </a>
-                    <a href="edit-profile.php" class="px-4 py-2 rounded-md transition duration-300 flex items-center text-gray-700 hover:bg-gray-100">
+                    <a href="edit-profile.php" class="px-4 py-2 rounded-md transition duration-300 flex items-center text-secondary hover:bg-gray-100">
                         <i class="fas fa-user-edit mr-2"></i> 
                         <span>Profile</span>
                     </a>
-                    <a href="history.php" class="px-4 py-2 rounded-md transition duration-300 flex items-center text-gray-700 hover:bg-gray-100">
+                    <a href="history.php" class="px-4 py-2 rounded-md transition duration-300 flex items-center text-secondary hover:bg-gray-100">
                         <i class="fas fa-history mr-2"></i> 
                         <span>History</span>
                     </a>
-                    <a href="reservation.php" class="px-4 py-2 rounded-md transition duration-300 flex items-center text-gray-700 hover:bg-gray-100">
+                    <a href="reservation.php" class="px-4 py-2 rounded-md transition duration-300 flex items-center text-secondary hover:bg-gray-100">
                         <i class="fas fa-calendar-plus mr-2"></i> 
                         <span>Reserve</span>
                     </a>
@@ -122,7 +122,7 @@ $announcements = mysqli_fetch_all($result, MYSQLI_ASSOC);
                     </a>
                 </div>
                 <div class="md:hidden">
-                    <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none" id="mobile-menu-button">
+                    <button type="button" class="text-gray-500 hover:text-secondary focus:outline-none" id="mobile-menu-button">
                         <i class="fas fa-bars text-xl"></i>
                     </button>
                 </div>
@@ -150,7 +150,7 @@ $announcements = mysqli_fetch_all($result, MYSQLI_ASSOC);
                     </div>
                     <div class="bg-blue-50 rounded-lg p-4 mb-4">
                         <div class="flex justify-between items-center">
-                            <span class="text-gray-700">Available Sessions:</span>
+                            <span class="text-secondary">Available Sessions:</span>
                             <span class="font-semibold text-primary text-lg"><?php echo htmlspecialchars($sessionno ?? 'N/A'); ?></span>
                         </div>
                     </div>
@@ -186,7 +186,7 @@ $announcements = mysqli_fetch_all($result, MYSQLI_ASSOC);
                                     <h4 class="font-medium"><?php echo htmlspecialchars($announcement['title']); ?></h4>
                                     <span class="text-xs text-gray-500"><?php echo date('M d, Y', strtotime($announcement['created_at'])); ?></span>
                                 </div>
-                                <p class="text-gray-700"><?php echo htmlspecialchars($announcement['content']); ?></p>
+                                <p class="text-secondary"><?php echo htmlspecialchars($announcement['content']); ?></p>
                             </div>
                         <?php endforeach; ?>
                     </div>
@@ -206,27 +206,27 @@ $announcements = mysqli_fetch_all($result, MYSQLI_ASSOC);
                             <div class="text-sm font-medium text-primary">LABORATORY RULES AND REGULATIONS</div>
                         </div>
                         
-                        <p class="mb-4 text-gray-700">To avoid embarrassment and maintain camaraderie with your friends and superiors at our laboratories, please observe the following:</p>
+                        <p class="mb-4 text-secondary">To avoid embarrassment and maintain camaraderie with your friends and superiors at our laboratories, please observe the following:</p>
                         
                         <div class="space-y-3">
                             <div class="p-3 rounded-lg border border-gray-200 bg-gray-50">
                                 <div class="flex items-start">
                                     <div class="bg-primary text-white rounded-full h-5 w-5 flex items-center justify-center text-xs mr-2 mt-0.5 flex-shrink-0">1</div>
-                                    <p class="text-gray-700">Maintain silence, proper decorum, and discipline inside the laboratory. Mobile phones, walkmans and other personal pieces of equipment must be switched off.</p>
+                                    <p class="text-secondary">Maintain silence, proper decorum, and discipline inside the laboratory. Mobile phones, walkmans and other personal pieces of equipment must be switched off.</p>
                                 </div>
                             </div>
                             
                             <div class="p-3 rounded-lg border border-gray-200 bg-gray-50">
                                 <div class="flex items-start">
                                     <div class="bg-primary text-white rounded-full h-5 w-5 flex items-center justify-center text-xs mr-2 mt-0.5 flex-shrink-0">2</div>
-                                    <p class="text-gray-700">Games are not allowed inside the lab. This includes computer-related games, card games and other games that may disturb the operation of the lab.</p>
+                                    <p class="text-secondary">Games are not allowed inside the lab. This includes computer-related games, card games and other games that may disturb the operation of the lab.</p>
                                 </div>
                             </div>
                             
                             <div class="p-3 rounded-lg border border-gray-200 bg-gray-50">
                                 <div class="flex items-start">
                                     <div class="bg-primary text-white rounded-full h-5 w-5 flex items-center justify-center text-xs mr-2 mt-0.5 flex-shrink-0">3</div>
-                                    <p class="text-gray-700">Surfing the Internet is allowed only with the permission of the instructor. Downloading and installing of software are strictly prohibited.</p>
+                                    <p class="text-secondary">Surfing the Internet is allowed only with the permission of the instructor. Downloading and installing of software are strictly prohibited.</p>
                                 </div>
                             </div>
                             
@@ -241,21 +241,21 @@ $announcements = mysqli_fetch_all($result, MYSQLI_ASSOC);
                                     <div class="p-3 rounded-lg border border-gray-200 bg-gray-50">
                                         <div class="flex items-start">
                                             <div class="bg-primary text-white rounded-full h-5 w-5 flex items-center justify-center text-xs mr-2 mt-0.5 flex-shrink-0">4</div>
-                                            <p class="text-gray-700">Getting access to other websites not related to the course (especially pornographic and illicit sites) is strictly prohibited.</p>
+                                            <p class="text-secondary">Getting access to other websites not related to the course (especially pornographic and illicit sites) is strictly prohibited.</p>
                                         </div>
                                     </div>
                                     
                                     <div class="p-3 rounded-lg border border-gray-200 bg-gray-50">
                                         <div class="flex items-start">
                                             <div class="bg-primary text-white rounded-full h-5 w-5 flex items-center justify-center text-xs mr-2 mt-0.5 flex-shrink-0">5</div>
-                                            <p class="text-gray-700">Deleting computer files and changing the set-up of the computer is a major offense.</p>
+                                            <p class="text-secondary">Deleting computer files and changing the set-up of the computer is a major offense.</p>
                                         </div>
                                     </div>
                                     
                                     <div class="p-3 rounded-lg border border-gray-200 bg-gray-50">
                                         <div class="flex items-start">
                                             <div class="bg-primary text-white rounded-full h-5 w-5 flex items-center justify-center text-xs mr-2 mt-0.5 flex-shrink-0">6</div>
-                                            <p class="text-gray-700">Observe computer time usage carefully. A fifteen-minute allowance is given for each use. Otherwise, the unit will be given to those who wish to "sit-in".</p>
+                                            <p class="text-secondary">Observe computer time usage carefully. A fifteen-minute allowance is given for each use. Otherwise, the unit will be given to those who wish to "sit-in".</p>
                                         </div>
                                     </div>
                                     
@@ -263,8 +263,8 @@ $announcements = mysqli_fetch_all($result, MYSQLI_ASSOC);
                                         <div class="flex items-start">
                                             <div class="bg-primary text-white rounded-full h-5 w-5 flex items-center justify-center text-xs mr-2 mt-0.5 flex-shrink-0">7</div>
                                             <div>
-                                                <p class="text-gray-700">Observe proper decorum while inside the laboratory.</p>
-                                                <ul class="list-disc pl-5 mt-2 text-gray-700 text-sm">
+                                                <p class="text-secondary">Observe proper decorum while inside the laboratory.</p>
+                                                <ul class="list-disc pl-5 mt-2 text-secondary text-sm">
                                                     <li>Do not get inside the lab unless the instructor is present.</li>
                                                     <li>All bags, knapsacks, and the likes must be deposited at the counter.</li>
                                                     <li>Follow the seating arrangement of your instructor.</li>
@@ -279,35 +279,35 @@ $announcements = mysqli_fetch_all($result, MYSQLI_ASSOC);
                                     <div class="p-3 rounded-lg border border-gray-200 bg-gray-50">
                                         <div class="flex items-start">
                                             <div class="bg-primary text-white rounded-full h-5 w-5 flex items-center justify-center text-xs mr-2 mt-0.5 flex-shrink-0">8</div>
-                                            <p class="text-gray-700">Chewing gum, eating, drinking, smoking, and other forms of vandalism are prohibited inside the lab.</p>
+                                            <p class="text-secondary">Chewing gum, eating, drinking, smoking, and other forms of vandalism are prohibited inside the lab.</p>
                                         </div>
                                     </div>
 
                                     <div class="p-3 rounded-lg border border-gray-200 bg-gray-50">
                                         <div class="flex items-start">
                                             <div class="bg-primary text-white rounded-full h-5 w-5 flex items-center justify-center text-xs mr-2 mt-0.5 flex-shrink-0">9</div>
-                                            <p class="text-gray-700">Anyone causing a continual disturbance will be asked to leave the lab. Acts or gestures offensive to the members of the community, including public display of physical intimacy, are not tolerated.</p>
+                                            <p class="text-secondary">Anyone causing a continual disturbance will be asked to leave the lab. Acts or gestures offensive to the members of the community, including public display of physical intimacy, are not tolerated.</p>
                                         </div>
                                     </div>
 
                                     <div class="p-3 rounded-lg border border-gray-200 bg-gray-50">
                                         <div class="flex items-start">
                                             <div class="bg-primary text-white rounded-full h-5 w-5 flex items-center justify-center text-xs mr-2 mt-0.5 flex-shrink-0">10</div>
-                                            <p class="text-gray-700">Persons exhibiting hostile or threatening behavior such as yelling, swearing, or disregarding requests made by lab personnel will be asked to leave the lab.</p>
+                                            <p class="text-secondary">Persons exhibiting hostile or threatening behavior such as yelling, swearing, or disregarding requests made by lab personnel will be asked to leave the lab.</p>
                                         </div>
                                     </div>
 
                                     <div class="p-3 rounded-lg border border-gray-200 bg-gray-50">
                                         <div class="flex items-start">
                                             <div class="bg-primary text-white rounded-full h-5 w-5 flex items-center justify-center text-xs mr-2 mt-0.5 flex-shrink-0">11</div>
-                                            <p class="text-gray-700">For serious offense, the lab personnel may call the Civil Security Office (CSU) for assistance.</p>
+                                            <p class="text-secondary">For serious offense, the lab personnel may call the Civil Security Office (CSU) for assistance.</p>
                                         </div>
                                     </div>
 
                                     <div class="p-3 rounded-lg border border-gray-200 bg-gray-50">
                                         <div class="flex items-start">
                                             <div class="bg-primary text-white rounded-full h-5 w-5 flex items-center justify-center text-xs mr-2 mt-0.5 flex-shrink-0">12</div>
-                                            <p class="text-gray-700">Any technical problem or difficulty must be addressed to the laboratory supervisor, student assistant or instructor immediately.</p>
+                                            <p class="text-secondary">Any technical problem or difficulty must be addressed to the laboratory supervisor, student assistant or instructor immediately.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -320,11 +320,11 @@ $announcements = mysqli_fetch_all($result, MYSQLI_ASSOC);
                                 <div class="space-y-2 text-sm">
                                     <div class="flex items-center">
                                         <div class="h-2 w-2 rounded-full bg-yellow-500 mr-2"></div>
-                                        <p class="text-gray-700">First Offense - The Head or the Dean or OIC recommends to the Guidance Center for a suspension from classes for each offender.</p>
+                                        <p class="text-secondary">First Offense - The Head or the Dean or OIC recommends to the Guidance Center for a suspension from classes for each offender.</p>
                                     </div>
                                     <div class="flex items-center">
                                         <div class="h-2 w-2 rounded-full bg-red-500 mr-2"></div>
-                                        <p class="text-gray-700">Second and Subsequent Offenses - A recommendation for a heavier sanction will be endorsed to the Guidance Center.</p>
+                                        <p class="text-secondary">Second and Subsequent Offenses - A recommendation for a heavier sanction will be endorsed to the Guidance Center.</p>
                                     </div>
                                 </div>
                             </div>

@@ -35,7 +35,7 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Sit-in - CCS Sit-in Monitoring</title>
+    <title>Records - CCS Sit-in Monitoring</title>
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="../../public/css/all.css">
     <!-- Add Tailwind CSS via CDN -->

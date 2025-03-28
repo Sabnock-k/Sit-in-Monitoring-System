@@ -53,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $error = "Invalid username or password!";
             }
         } else {
-            if ($username == "admin" && $password == "adminpassword") {
+            if (strtolower($username) == "admin" && $password == "adminpassword") {
                 $_SESSION['user_id'] = '1';
                 $_SESSION['username'] = 'admin';
                 $_SESSION['loggedin'] = true;

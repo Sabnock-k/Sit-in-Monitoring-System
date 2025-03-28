@@ -60,16 +60,6 @@ $announcements = mysqli_fetch_all($result, MYSQLI_ASSOC);
         
         body {
             font-family: 'Inter', sans-serif;
-            animation: fadeIn 1s ease-in-out;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
         }
 
         .heading-font {

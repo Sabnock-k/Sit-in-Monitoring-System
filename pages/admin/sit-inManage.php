@@ -249,11 +249,11 @@ include('modals/search.php');
                                             <div class="text-sm text-gray-900"><?php echo date('h:i A', strtotime($sit_in['check_in_time'])); ?></div>
                                             <div class="text-xs text-gray-500"><?php echo date('M d, Y', strtotime($sit_in['check_in_date'])); ?></div>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-small">
                                             <form method="POST" action="" class="inline">
                                                 <input type="hidden" name="sit_in_id" value="<?php echo $sit_in['idno']; ?>">
                                                 <button type="submit" name="checkout_student" class="text-white bg-red-500 hover:bg-red-600 px-3 py-1 rounded-md transition duration-200">
-                                                    Check Out
+                                                    Time Out
                                                 </button>
                                             </form>
                                         </td>

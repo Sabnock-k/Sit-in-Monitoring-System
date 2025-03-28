@@ -27,9 +27,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['registerSitIn'])) {
     } else {
         // Check if student has an ongoing sit-in
         $check_sql = "SELECT * FROM sit_ins WHERE student_id = '$studentId' AND check_out_time = NULL";
-        $check_result = $conn->query($check_sql);
-        
-        if ($check_result->num_rows > 0) {
+        $sit_in_check_result = $conn->query($check_sql);
+
+        // Check student if have 0 session left
+        $check_session_sql = "SELECT * FROM users WHERE idno = '$studentId' AND sessionno = 0";
+        $check_session_result = $conn->query($check_session_sql);
+
+        if ($check_session_result->num_rows > 0) {
+            $error_message = "This student has no session left.";
+        } elseif ($sit_in_check_result->num_rows > 0) {
             $error_message = "This student has student has an ongoing sit-in. Please check out the student first.";
         } else {
             // Insert into database
@@ -38,7 +44,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['registerSitIn'])) {
             
             if ($conn->query($sql)) {
                 $success_message = "Student sit-in registered successfully!";
-                // Update student's status session number
+                // Wait for a few sec and reload the this page
+                header("Refresh: 1");
             } else {
                 $error_message = "Error registering sit-in: " . $conn->error;
             }
@@ -133,7 +140,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['registerSitIn'])) {
                 <!-- Submit Button -->
                 <div class="flex justify-end">
                     <button id="sbtn" type="submit" name="registerSitIn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-150 ease-in-out">
-                        Register Sit-in
+                        Sit-in Student
                     </button>
                 </div>
             </form>

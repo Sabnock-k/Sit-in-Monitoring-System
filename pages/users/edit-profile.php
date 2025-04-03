@@ -254,7 +254,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="container mx-auto px-4 text-center text-gray-600 text-sm">
             <p>&copy; 2025 University of Cebu - College of Computer Studies</p>
             <p class="text-xs mt-1">Developed by Rafael B. Patiño</p>
-            <p class="mt-1 text-xs">System Version 1</p>
         </div>
     </footer>
     

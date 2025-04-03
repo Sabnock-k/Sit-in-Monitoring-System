@@ -1,5 +1,14 @@
 <?php
 include("../../conn/db.php");
+// Check if user is logged in
+
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+    header("Location: ../../login.php");
+    exit();
+} else if ($_SESSION['username'] !== 'admin') {
+    header("Location: ../../login.php");
+    exit();
+}
 
 // Get all students
 $sql = "SELECT * FROM users";
@@ -46,6 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['registerSitIn'])) {
                 $success_message = "Student sit-in registered successfully!";
                 // Wait for a few sec and reload the this page
                 header("Refresh: 1");
+                exit();
             } else {
                 $error_message = "Error registering sit-in: " . $conn->error;
             }

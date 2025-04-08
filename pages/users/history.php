@@ -213,7 +213,6 @@ $sit_in_record = $conn->query($sql);
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <?php if (!empty($sit_in['check_out_time']) && empty($sit_in['feedback'])): ?>
                                                 <button 
-                                                    data-id="<?php echo $sit_in['student_id']; ?>" 
                                                     class="feedback-btn px-3 py-1.5 text-sm bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200 focus:outline-none transition duration-200 flex items-center">
                                                     <i class="fas fa-comment mr-1"></i> Add Feedback
                                                 </button>

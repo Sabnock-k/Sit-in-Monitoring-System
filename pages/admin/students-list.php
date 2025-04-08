@@ -12,22 +12,23 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     exit();
 }
 
-// Get all number of active sit-ins
-$sql = "SELECT COUNT(*) AS count FROM sit_ins WHERE check_out_time IS NULL";
-$result = $conn->query($sql);
-$active_count = $result->fetch_assoc()['count'];
+// Set default records per page
+$records_per_page = isset($_GET['records_per_page']) ? (int)$_GET['records_per_page'] : 10;
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$offset = ($page - 1) * $records_per_page;
 
-// Get all number of active sit-ins for today
-$today = date('Y-m-d');
-$sql = "SELECT COUNT(*) AS count FROM sit_ins WHERE check_in_date = '$today'";
-$result = $conn->query($sql);
-$today_count = $result->fetch_assoc()['count'];
+// Get total number of records
+$count_sql = "SELECT COUNT(*) as total FROM users";
+$count_result = $conn->query($count_sql);
+$total_records = $count_result->fetch_assoc()['total'];
+$total_pages = ceil($total_records / $records_per_page);
 
-// Get all record of sit-ins
-$sql = "SELECT idno, lastname, firstname, midname, course, year_level, sessionno FROM users";
+// Get records with pagination
+$sql = "SELECT idno, lastname, firstname, midname, course, year_level, sessionno FROM users LIMIT $offset, $records_per_page";
 $result = $conn->query($sql);
 $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -161,6 +162,15 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
                 <div class="border-b border-gray-200 p-4 flex justify-between items-center">
                     <h2 class="heading-font text-lg font-semibold text-gray-800">Sit-in Records</h2>
                     <div class="flex space-x-2">
+                        <div class="flex items-center">
+                            <label for="recordsPerPage" class="text-sm text-gray-600 mr-2">Show:</label>
+                            <select id="recordsPerPage" class="text-sm border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-primary">
+                                <option value="10" <?php echo $records_per_page == 10 ? 'selected' : ''; ?>>10</option>
+                                <option value="25" <?php echo $records_per_page == 25 ? 'selected' : ''; ?>>25</option>
+                                <option value="50" <?php echo $records_per_page == 50 ? 'selected' : ''; ?>>50</option>
+                                <option value="100" <?php echo $records_per_page == 100 ? 'selected' : ''; ?>>100</option>
+                            </select>
+                        </div>
                         <button id="refreshBtn" class="px-3 py-1.5 text-sm bg-gray-100 text-secondary rounded-md hover:bg-gray-200 focus:outline-none transition duration-200 flex items-center">
                             <i class="fas fa-sync-alt mr-1"></i> Refresh
                         </button>
@@ -213,6 +223,35 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
                                 <?php endif; ?>
                             </tbody>
                         </table>
+                        <!-- Pagination -->
+                        <div class="flex justify-between items-center mt-4 px-6 py-3">
+                            <div class="text-sm text-gray-600">
+                                Showing <?php echo min(($page-1)*$records_per_page+1, $total_records); ?> to <?php echo min($page*$records_per_page, $total_records); ?> of <?php echo $total_records; ?> entries
+                            </div>
+                            <div class="flex space-x-1">
+                                <?php if($page > 1): ?>
+                                    <a href="?page=1&records_per_page=<?php echo $records_per_page; ?>" class="px-3 py-1 text-sm bg-gray-100 text-secondary rounded-md hover:bg-gray-200">First</a>
+                                    <a href="?page=<?php echo $page-1; ?>&records_per_page=<?php echo $records_per_page; ?>" class="px-3 py-1 text-sm bg-gray-100 text-secondary rounded-md hover:bg-gray-200">Previous</a>
+                                <?php endif; ?>
+                                
+                                <?php 
+                                $start_page = max(1, $page - 2);
+                                $end_page = min($total_pages, $page + 2);
+                                
+                                for($i = $start_page; $i <= $end_page; $i++): 
+                                ?>
+                                    <a href="?page=<?php echo $i; ?>&records_per_page=<?php echo $records_per_page; ?>" 
+                                    class="px-3 py-1 text-sm <?php echo $i == $page ? 'bg-primary text-white' : 'bg-gray-100 text-secondary hover:bg-gray-200'; ?> rounded-md">
+                                        <?php echo $i; ?>
+                                    </a>
+                                <?php endfor; ?>
+                                
+                                <?php if($page < $total_pages): ?>
+                                    <a href="?page=<?php echo $page+1; ?>&records_per_page=<?php echo $records_per_page; ?>" class="px-3 py-1 text-sm bg-gray-100 text-secondary rounded-md hover:bg-gray-200">Next</a>
+                                    <a href="?page=<?php echo $total_pages; ?>&records_per_page=<?php echo $records_per_page; ?>" class="px-3 py-1 text-sm bg-gray-100 text-secondary rounded-md hover:bg-gray-200">Last</a>
+                                <?php endif; ?>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -254,6 +293,15 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
         document.getElementById('refreshBtn').addEventListener('click', function() {
             location.reload();
         });
+        
+        // Handle records per page dropdown
+        document.getElementById('recordsPerPage').addEventListener('change', function() {
+            const recordsPerPage = this.value;
+            window.location.href = `?page=1&records_per_page=${recordsPerPage}`;
+        });
     </script>
 </body>
 </html>
+
+
+

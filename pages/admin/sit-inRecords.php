@@ -164,9 +164,6 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
                         <button id="refreshBtn" class="px-3 py-1.5 text-sm bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 focus:outline-none transition duration-200 flex items-center">
                             <i class="fas fa-sync-alt mr-1"></i> Refresh
                         </button>
-                        <button id="exportBtn" class="px-3 py-1.5 text-sm bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none transition duration-200 flex items-center">
-                            <i class="fas fa-file-export mr-1"></i> Export
-                        </button>
                     </div>
                 </div>
                 <div class="p-4">
@@ -179,7 +176,6 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Middle Name</th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course</th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Year Level</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Session no</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200" id="activeSitInsList">
@@ -207,9 +203,6 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="text-sm text-gray-900"><?php echo htmlspecialchars($sit_in['year_level']); ?></div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900"><?php echo htmlspecialchars($sit_in['sessionno']); ?></div>
                                         </td>
                                     </tr>
                                     <?php endforeach; ?>
@@ -258,11 +251,6 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
         // Refresh button
         document.getElementById('refreshBtn').addEventListener('click', function() {
             location.reload();
-        });
-
-        // Export button (placeholder functionality)
-        document.getElementById('exportBtn').addEventListener('click', function() {
-            alert('Export functionality will be implemented here');
         });
     </script>
 </body>

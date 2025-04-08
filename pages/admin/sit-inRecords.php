@@ -12,19 +12,8 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     exit();
 }
 
-// Get all number of active sit-ins
-$sql = "SELECT COUNT(*) AS count FROM sit_ins WHERE check_out_time IS NULL";
-$result = $conn->query($sql);
-$active_count = $result->fetch_assoc()['count'];
-
-// Get all number of active sit-ins for today
-$today = date('Y-m-d');
-$sql = "SELECT COUNT(*) AS count FROM sit_ins WHERE check_in_date = '$today'";
-$result = $conn->query($sql);
-$today_count = $result->fetch_assoc()['count'];
-
 // Get all record of sit-ins
-$sql = "SELECT idno, lastname, firstname, midname, course, year_level, sessionno FROM users";
+$sql = "SELECT student_id, laboratory, purpose, check_in_date, check_in_time, check_out_time FROM sit_ins";
 $result = $conn->query($sql);
 $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
 ?>
@@ -91,7 +80,7 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
     </style>
 </head>
 
-<body>
+<body class="min-h-screen flex flex-col">
     <nav class="bg-white border-b border-gray-200 fixed w-full z-50 shadow-sm">
         <div class="container mx-auto px-4">
             <div class="flex justify-between items-center py-3">
@@ -154,7 +143,7 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
     </nav>
 
     <!-- Main Content Area -->
-    <div class="pt-16 px-4 md:px-6 lg:px-8 container mx-auto max-w-6xl">
+    <div class="pt-16 px-4 md:px-6 lg:px-8 container mx-auto max-w-6xl flex-grow">
         <div class="py-6">
             <!-- Active Sit-ins List -->
             <div class="md:col-span-2 bg-white rounded-lg border border-gray-300 shadow-md hover:shadow-xl transition-shadow duration-300">
@@ -171,11 +160,11 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                 <tr>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Firstname</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Lastname</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Middle Name</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Year Level</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student no</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">laboratory</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Purpose</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Check in date/time</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Check out time</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200" id="activeSitInsList">
@@ -190,19 +179,20 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
                                     <?php foreach ($sit_in_record as $sit_in): ?>
                                     <tr>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900"><?php echo htmlspecialchars($sit_in['firstname']); ?></div>
+                                            <div class="text-sm text-gray-900"><?php echo htmlspecialchars($sit_in['student_id']); ?></div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900"><?php echo htmlspecialchars($sit_in['lastname']); ?></div>
+                                            <div class="text-sm text-gray-900"><?php echo htmlspecialchars($sit_in['laboratory']); ?></div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900"><?php echo htmlspecialchars($sit_in['midname']); ?></div>
+                                            <div class="text-sm text-gray-900"><?php echo htmlspecialchars($sit_in['purpose']); ?></div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900"><?php echo htmlspecialchars($sit_in['course']); ?></div>
+                                            <div class="text-sm text-gray-900"><?php echo htmlspecialchars($sit_in['check_in_date']); ?></div>
+                                            <div class="text-sm text-gray-900"><?php echo htmlspecialchars($sit_in['check_in_time']); ?></div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900"><?php echo htmlspecialchars($sit_in['year_level']); ?></div>
+                                            <div class="text-sm text-gray-900"><?php echo htmlspecialchars($sit_in['check_out_time']); ?></div>
                                         </td>
                                     </tr>
                                     <?php endforeach; ?>

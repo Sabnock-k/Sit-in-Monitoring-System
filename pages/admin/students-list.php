@@ -110,7 +110,7 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
                     </a>
                     
                     <div class="relative group">
-                        <a href="student-list.php" class="px-3 py-2 rounded-md transition duration-300 flex items-center text-gray-700 hover:bg-gray-100">
+                        <a href="students-list.php" class="px-3 py-2 rounded-md transition duration-300 flex items-center text-primary bg-blue-50">
                             <i class="fas fa-users mr-2"></i><span>Students</span>
                         </a>
                     </div>
@@ -122,13 +122,13 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
                     </div>
                     
                     <div class="relative group">
-                        <button class="dropdown-button px-3 py-2 rounded-md transition duration-300 flex items-center font-medium">
+                        <button class="dropdown-button px-3 py-2 rounded-md transition duration-300 flex items-center font-medium text-gray-700 hover:bg-gray-100">
                             <i class="fas fa-clipboard-list mr-2"></i><span>Sit-in</span>
                             <i class="icon fas fa-chevron-down ml-1 text-xs"></i>
                         </button>
                         <div class="dropdown-content absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden">
                             <a href="sit-inManage.php" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Manage Sit-in</a>
-                            <a href="sit-inRecords.php" class="block px-4 py-2 text-sm text-primary bg-blue-50 hover:bg-blue-100">View Records</a>
+                            <a href="sit-inRecords.php" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">View Records</a>
                             <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Reports</a>
                         </div>
                     </div>

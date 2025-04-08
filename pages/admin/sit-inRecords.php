@@ -122,7 +122,7 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
                     </div>
                     
                     <div class="relative group">
-                        <button class="dropdown-button px-3 py-2 rounded-md transition duration-300 flex items-center font-medium">
+                        <button class="dropdown-button px-3 py-2 rounded-md transition duration-300 flex items-center font-medium text-primary bg-blue-50">
                             <i class="fas fa-clipboard-list mr-2"></i><span>Sit-in</span>
                             <i class="icon fas fa-chevron-down ml-1 text-xs"></i>
                         </button>

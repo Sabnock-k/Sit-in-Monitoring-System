@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3307
--- Generation Time: Apr 08, 2025 at 05:37 AM
+-- Generation Time: Apr 08, 2025 at 06:18 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -87,7 +87,19 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `idno`, `lastname`, `firstname`, `midname`, `course`, `year_level`, `email`, `address`, `username`, `sessionno`, `password_hash`, `created_at`) VALUES
-(4, '22652424', 'Patino', 'Rafael', 'Bacarisas', 'Information Technology', 'Third year', 'sit-in@gmail.com', 'UC MAIN', 'Sabnock', 28, '$2y$10$oDLjVjrpeWJ4k0P4PD743u9hEfMD7Jfi.l7BR3havpbmceTp7xQwe', '2025-03-06 03:07:18');
+(1, '22652424', 'Patino', 'Rafael', 'Bacarisas', 'Information Technology', 'Third year', 'sit-in@gmail.com', 'UC MAIN', 'Sabnock', 28, '$2y$10$oDLjVjrpeWJ4k0P4PD743u9hEfMD7Jfi.l7BR3havpbmceTp7xQwe', '2025-03-06 03:07:18'),
+(2, '22652425', 'Santos', 'Alice', 'Reyes', 'Computer Science', 'First year', 'alice@example.com', '123 St., City', 'alice01', 30, '$2y$10$oDLjVjrpeWJ4k0P4PD743u9hEfMD7Jfi.l7BR3havpbmceTp7xQwe', '2025-04-08 04:14:10'),
+(3, '22652426', 'Navarro', 'Bryan', 'Cruz', 'Information Technology', 'Second year', 'bryan@example.com', '456 Ave., City', 'bryan02', 30, '$2y$10$oDLjVjrpeWJ4k0P4PD743u9hEfMD7Jfi.l7BR3havpbmceTp7xQwe', '2025-04-08 04:14:10'),
+(4, '22652427', 'Dela Peña', 'Carla', NULL, 'Computer Science', 'Third year', 'carla@example.com', '789 Blvd., City', 'carla03', 30, '$2y$10$M9hYjKuvtM03rRAn8h8AeeFmSTX.7TdcYF6iC4Z8cVUbW2fhFKXvi', '2025-04-08 04:14:10'),
+(5, '22652428', 'Reyes', 'Daniel', 'Ramos', 'Information Technology', 'Fourth year', 'daniel@example.com', '101 St., City', 'daniel04', 30, '$2y$10$M9hYjKuvtM03rRAn8h8AeeFmSTX.7TdcYF6iC4Z8cVUbW2fhFKXvi', '2025-04-08 04:14:10'),
+(6, '22652429', 'Go', 'Erica', 'Tan', 'Computer Science', 'First year', 'erica@example.com', '202 Ave., City', 'erica05', 30, '$2y$10$oDLjVjrpeWJ4k0P4PD743u9hEfMD7Jfi.l7BR3havpbmceTp7xQwe', '2025-04-08 04:14:10'),
+(7, '22652430', 'Bautista', 'Francis', 'Lim', 'Information Technology', 'Second year', 'francis@example.com', '303 Blvd., City', 'francis06', 30, '$2y$10$oDLjVjrpeWJ4k0P4PD743u9hEfMD7Jfi.l7BR3havpbmceTp7xQwe', '2025-04-08 04:14:10'),
+(8, '22652431', 'Martinez', 'Grace', 'Uy', 'Computer Science', 'Third year', 'grace@example.com', '404 St., City', 'grace07', 30, '$2y$10$oDLjVjrpeWJ4k0P4PD743u9hEfMD7Jfi.l7BR3havpbmceTp7xQwe', '2025-04-08 04:14:10'),
+(9, '22652432', 'Salvador', 'Henry', 'Ong', 'Information Technology', 'Fourth year', 'henry@example.com', '505 Ave., City', 'henry08', 30, '$2y$10$oDLjVjrpeWJ4k0P4PD743u9hEfMD7Jfi.l7BR3havpbmceTp7xQwe', '2025-04-08 04:14:10'),
+(10, '22652433', 'Mendoza', 'Ivy', 'Lopez', 'Computer Science', 'Second year', 'ivy@example.com', '606 Blvd., City', 'ivy09', 30, '$2y$10$oDLjVjrpeWJ4k0P4PD743u9hEfMD7Jfi.l7BR3havpbmceTp7xQwe', '2025-04-08 04:14:10'),
+(11, '22652434', 'Hernandez', 'Jake', 'Sy', 'Information Technology', 'First year', 'jake@example.com', '707 St., City', 'jake10', 30, '$2y$10$oDLjVjrpeWJ4k0P4PD743u9hEfMD7Jfi.l7BR3havpbmceTp7xQwe', '2025-04-08 04:14:10'),
+(12, '22652427', 'Dela Peña', 'Carla', NULL, 'Computer Science', 'Third year', 'carla@example.com', '789 Blvd., City', 'carla03', 30, '$2y$10$oDLjVjrpeWJ4k0P4PD743u9hEfMD7Jfi.l7BR3havpbmceTp7xQwe', '2025-04-08 04:14:10'),
+(13, '22652428', 'Reyes', 'Daniel', 'Ramos', 'Information Technology', 'Fourth year', 'daniel@example.com', '101 St., City', 'daniel04', 30, '$2y$10$oDLjVjrpeWJ4k0P4PD743u9hEfMD7Jfi.l7BR3havpbmceTp7xQwe', '2025-04-08 04:14:10');
 
 --
 -- Indexes for dumped tables
@@ -119,7 +131,7 @@ ALTER TABLE `announcements`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

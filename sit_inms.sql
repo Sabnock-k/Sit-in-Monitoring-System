@@ -2,8 +2,8 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Mar 25, 2025 at 05:57 AM
+-- Host: 127.0.0.1:3307
+-- Generation Time: Apr 08, 2025 at 05:37 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -42,21 +42,23 @@ CREATE TABLE `announcements` (
 --
 
 CREATE TABLE `sit_ins` (
-  `student_id` VARCHAR(100) NOT NULL,
-  `laboratory` VARCHAR(250) NOT NULL,
-  `purpose` VARCHAR(255) NOT NULL,
-  `check_in_date` DATE NOT NULL,
-  `check_in_time` TIME NOT NULL,
-  `check_out_time` TIME DEFAULT NULL
+  `student_id` varchar(100) NOT NULL,
+  `laboratory` varchar(250) NOT NULL,
+  `purpose` varchar(255) NOT NULL,
+  `check_in_date` date NOT NULL,
+  `check_in_time` time NOT NULL,
+  `check_out_time` time DEFAULT NULL,
+  `rating` int(11) DEFAULT NULL,
+  `feedback` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
 
 --
 -- Dumping data for table `sit_ins`
 --
 
-INSERT INTO `sit_ins` (`student_id`, `laboratory`, `purpose`, `check_in_date`, `check_in_time`, `check_out_time`) VALUES
-('22652424', '524', 'C# Programming', '2025-03-25', '10:30:00', '12:45:00');
+INSERT INTO `sit_ins` (`student_id`, `laboratory`, `purpose`, `check_in_date`, `check_in_time`, `check_out_time`, `rating`, `feedback`) VALUES
+('22652424', '524', 'C# Programming', '2025-03-25', '10:30:00', '12:45:00', 5, 'Boring'),
+('22652424', '530', 'C Programming', '2025-04-03', '06:24:59', '06:40:13', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -85,7 +87,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `idno`, `lastname`, `firstname`, `midname`, `course`, `year_level`, `email`, `address`, `username`, `sessionno`, `password_hash`, `created_at`) VALUES
-(4, '22652424', 'Patino', 'Rafael', 'Bacarisas', 'Information Technology', 'Third year', 'sit-in@gmail.com', 'UC MAIN', 'Sabnock', 29, '$2y$10$oDLjVjrpeWJ4k0P4PD743u9hEfMD7Jfi.l7BR3havpbmceTp7xQwe', '2025-03-06 03:07:18');
+(4, '22652424', 'Patino', 'Rafael', 'Bacarisas', 'Information Technology', 'Third year', 'sit-in@gmail.com', 'UC MAIN', 'Sabnock', 28, '$2y$10$oDLjVjrpeWJ4k0P4PD743u9hEfMD7Jfi.l7BR3havpbmceTp7xQwe', '2025-03-06 03:07:18');
 
 --
 -- Indexes for dumped tables

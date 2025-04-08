@@ -13,7 +13,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 }
 
 // Get all record of sit-ins
-$sql = "SELECT student_id, laboratory, purpose, check_in_date, check_in_time, check_out_time FROM sit_ins";
+$sql = "SELECT student_id, laboratory, purpose, check_in_date, check_in_time, check_out_time FROM sit_ins ORDER BY check_in_date DESC, check_in_time DESC";
 $result = $conn->query($sql);
 $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
 ?>

@@ -105,7 +105,7 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
                 
                 <!-- Desktop Navigation -->
                 <div class="hidden md:flex space-x-2">
-                    <a href="homepage.php" class="px-3 py-2 rounded-md transition duration-300 flex items-center text-gray-700 hover:bg-gray-100">
+                    <a href="homepage.php" class="px-3 py-2 rounded-md transition duration-300 flex items-center text-secondary hover:bg-gray-100">
                         <i class="fas fa-home mr-2"></i><span>Dashboard</span>
                     </a>
                     
@@ -116,31 +116,31 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
                     </div>
                     
                     <div class="relative group">
-                        <a href="#" class="open-search-modal px-3 py-2 rounded-md transition duration-300 flex items-center text-gray-700 hover:bg-gray-100">
+                        <a href="#" class="open-search-modal px-3 py-2 rounded-md transition duration-300 flex items-center text-secondary hover:bg-gray-100">
                             <i class="fas fa-search mr-2"></i><span>Search</span>
                         </a>
                     </div>
                     
                     <div class="relative group">
-                        <button class="dropdown-button px-3 py-2 rounded-md transition duration-300 flex items-center font-medium text-gray-700 hover:bg-gray-100">
+                        <button class="dropdown-button px-3 py-2 rounded-md transition duration-300 flex items-center font-medium text-secondary hover:bg-gray-100">
                             <i class="fas fa-clipboard-list mr-2"></i><span>Sit-in</span>
                             <i class="icon fas fa-chevron-down ml-1 text-xs"></i>
                         </button>
                         <div class="dropdown-content absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden">
-                            <a href="sit-inManage.php" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Manage Sit-in</a>
-                            <a href="sit-inRecords.php" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">View Records</a>
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Reports</a>
+                            <a href="sit-inManage.php" class="block px-4 py-2 text-sm text-secondary hover:bg-gray-100">Manage Sit-in</a>
+                            <a href="sit-inRecords.php" class="block px-4 py-2 text-sm text-secondary hover:bg-gray-100">View Records</a>
+                            <a href="#" class="block px-4 py-2 text-sm text-secondary hover:bg-gray-100">Reports</a>
                         </div>
                     </div>
                     
                     <div class="relative group">
-                        <button class="px-3 py-2 rounded-md transition duration-300 flex items-center text-gray-700 hover:bg-gray-100">
+                        <button class="px-3 py-2 rounded-md transition duration-300 flex items-center text-secondary hover:bg-gray-100">
                             <i class="fas fa-calendar-alt mr-2"></i><span>Reservation</span>
                         </button>
                     </div>
                     
                     <div class="relative group">
-                        <button class="px-3 py-2 rounded-md transition duration-300 flex items-center text-gray-700 hover:bg-gray-100">
+                        <button class="px-3 py-2 rounded-md transition duration-300 flex items-center text-secondary hover:bg-gray-100">
                             <i class="fas fa-comment-alt mr-2"></i><span>Feedback</span>
                         </button>
                     </div>
@@ -161,7 +161,7 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
                 <div class="border-b border-gray-200 p-4 flex justify-between items-center">
                     <h2 class="heading-font text-lg font-semibold text-gray-800">Sit-in Records</h2>
                     <div class="flex space-x-2">
-                        <button id="refreshBtn" class="px-3 py-1.5 text-sm bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 focus:outline-none transition duration-200 flex items-center">
+                        <button id="refreshBtn" class="px-3 py-1.5 text-sm bg-gray-100 text-secondary rounded-md hover:bg-gray-200 focus:outline-none transition duration-200 flex items-center">
                             <i class="fas fa-sync-alt mr-1"></i> Refresh
                         </button>
                         <button id="exportBtn" class="px-3 py-1.5 text-sm bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none transition duration-200 flex items-center">

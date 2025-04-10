@@ -1,4 +1,4 @@
-<ta?php
+<?php
 session_start();
 include('../../conn/db.php');
 include('modals/search.php');
@@ -12,7 +12,9 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     exit();
 }
 
-
+// fetch all data of students feedbacks
+$sql = "SELECT firstname, lastname, midname, course, year_level, laboratory, rating, feedback FROM sit_ins JOIN users ON sit_ins.student_id = users.idno WHERE rating IS NOT NULL AND feedback IS NOT NULL";
+$result = mysqli_query($conn, $sql);
 ?>
 
 <!DOCTYPE html>
@@ -167,6 +169,43 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Feedback</th>
                                 </tr>
                             </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <!-- loop through feedback data from result -->
+                                <?php while ($feedbacks = $result->fetch_assoc()): ?>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm text-gray-900"><?php echo htmlspecialchars($feedbacks['firstname']); ?></div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm text-gray-900"><?php echo htmlspecialchars($feedbacks['lastname']); ?></div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm text-gray-900"><?php echo htmlspecialchars($feedbacks['midname']); ?></div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm text-gray-900"><?php echo htmlspecialchars($feedbacks['course']); ?></div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm text-gray-900"><?php echo htmlspecialchars($feedbacks['year_level']); ?></div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm text-gray-900"><?php echo htmlspecialchars($feedbacks['laboratory']); ?></div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex text-yellow-400">
+                                            <?php for($i = 1; $i <= 5; $i++): ?>
+                                                <?php if($i <= $feedbacks['rating']): ?>
+                                                    <i class="fas fa-heart"></i>
+                                                <?php else: ?>
+                                                    <i class="far fa-heart"></i>
+                                                <?php endif; ?>
+                                            <?php endfor; ?>
+                                        </div>
+                                        <span class="text-xs text-gray-600"><?php echo htmlspecialchars($feedbacks['feedback']); ?></span>
+                                        </td>
+                                    </tr>
+                                <?php endwhile; ?>
+                            </tbody>
                         </table>
                     </div>
                 </div>

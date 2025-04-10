@@ -2,6 +2,7 @@
 session_start();
 include('../../conn/db.php');
 include('modals/search.php');
+include('modals/edit-student.php');
 
 // Check if user is logged in
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
@@ -187,6 +188,7 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course</th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Year Level</th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Session no</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200" id="activeSitInsList">
@@ -217,6 +219,20 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="text-sm text-gray-900"><?php echo htmlspecialchars($sit_in['sessionno']); ?></div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <!-- put them side by side -->
+                                            <div class="flex space-x-2">
+                                                <div class="text-sm text-gray-900">
+                                                    <button class="px-2 py-1 text-sm bg-gray-100 text-secondary rounded-md hover:bg-gray-200 focus:outline-none transition duration-200 flex items-center">Edit</button>
+                                                </div>
+                                                <div class="text-sm text-gray-900">
+                                                    <button class="px-2 py-1 text-sm bg-gray-100 text-secondary rounded-md hover:bg-gray-200 focus:outline-none transition duration-200 flex items-center">Delete</button>
+                                                </div>
+                                                <div class="text-sm text-gray-900">
+                                                    <button class="px-2 py-1 text-sm bg-gray-100 text-secondary rounded-md hover:bg-gray-200 focus:outline-none transition duration-200 flex items-center">Reset</button>
+                                                </div>
+                                            </div>
                                         </td>
                                     </tr>
                                     <?php endforeach; ?>
@@ -288,6 +304,13 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
             button.addEventListener('click', function(e) {
                 e.preventDefault();
                 searchModal.classList.remove('hidden');
+            });
+        });
+
+        // Open edit student modal
+        document.querySelectorAll('.open-edit-student-modal').forEach(button => {
+            button.addEventListener('click', function(e) {
+                EditStudentModal.classList.remove('hidden');
             });
         });
         

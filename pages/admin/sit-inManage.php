@@ -162,9 +162,9 @@ include('modals/search.php');
                     </div>
                     
                     <div class="relative group">
-                        <button class="px-3 py-2 rounded-md transition duration-300 flex items-center text-secondary hover:bg-gray-100">
+                        <a href="feedback.php" class="px-3 py-2 rounded-md transition duration-300 flex items-center text-secondary hover:bg-gray-100">
                             <i class="fas fa-comment-alt mr-2"></i><span>Feedback</span>
-                        </button>
+                        </a>
                     </div>
                     
                     <a href="../../logout.php" class="px-3 py-2 rounded-md transition duration-300 flex items-center text-red-600 hover:bg-red-50">

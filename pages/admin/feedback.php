@@ -1,4 +1,4 @@
-<?php
+<ta?php
 session_start();
 include('../../conn/db.php');
 include('modals/search.php');
@@ -8,14 +8,11 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     header("Location: ../../login.php");
     exit();
 } else if ($_SESSION['username'] !== 'admin') {
-    header("Location: ../../login.php");
+    header("Location: ../users/homepage.php");
     exit();
 }
 
-// Get all record of sit-ins
-$sql = "SELECT student_id, laboratory, purpose, check_in_date, check_in_time, check_out_time FROM sit_ins ORDER BY check_in_date DESC, check_in_time DESC";
-$result = $conn->query($sql);
-$sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
+
 ?>
 
 <!DOCTYPE html>
@@ -23,11 +20,11 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Sit-in - CCS Sit-in Monitoring</title>
-    <!-- Add Tailwind CSS via CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Dashboard - CCS Sit-in Monitoring</title>
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="../../public/css/all.css">
+    <!-- Add Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -94,7 +91,7 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
                 
                 <!-- Desktop Navigation -->
                 <div class="hidden md:flex space-x-2">
-                    <a href="homepage.php" class="px-3 py-2 rounded-md transition duration-300 flex items-center text-secondary hover:bg-gray-100">
+                    <a href="homepage.php" class="px-3 py-2 rounded-md transition duration-300 flex items-center font-medium text-secondary hover:bg-gray-100">
                         <i class="fas fa-home mr-2"></i><span>Dashboard</span>
                     </a>
                     
@@ -111,13 +108,13 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
                     </div>
                     
                     <div class="relative group">
-                        <button class="dropdown-button px-3 py-2 rounded-md transition duration-300 flex items-center font-medium text-primary bg-blue-50">
+                        <button class="dropdown-button px-3 py-2 rounded-md transition duration-300 flex items-center text-secondary hover:bg-gray-100">
                             <i class="fas fa-clipboard-list mr-2"></i><span>Sit-in</span>
                             <i class="icon fas fa-chevron-down ml-1 text-xs"></i>
                         </button>
                         <div class="dropdown-content absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden">
                             <a href="sit-inManage.php" class="block px-4 py-2 text-sm text-secondary hover:bg-gray-100">Manage Sit-in</a>
-                            <a href="sit-inRecords.php" class="block px-4 py-2 text-sm text-primary bg-blue-50 hover:bg-blue-100">View Records</a>
+                            <a href="sit-inRecords.php" class="block px-4 py-2 text-sm text-secondary hover:bg-gray-100">View Records</a>
                             <a href="#" class="block px-4 py-2 text-sm text-secondary hover:bg-gray-100">Reports</a>
                         </div>
                     </div>
@@ -129,7 +126,7 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
                     </div>
                     
                     <div class="relative group">
-                        <a href="feedback.php" class="px-3 py-2 rounded-md transition duration-300 flex items-center text-secondary hover:bg-gray-100">
+                        <a href="feedback.php" class="px-3 py-2 rounded-md transition duration-300 flex items-center text-primary bg-blue-50">
                             <i class="fas fa-comment-alt mr-2"></i><span>Feedback</span>
                         </a>
                     </div>
@@ -143,12 +140,13 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
     </nav>
 
     <!-- Main Content Area -->
-    <div class="pt-16 px-4 md:px-6 lg:px-8 container mx-auto max-w-6xl flex-grow">
+    <div class="container mx-auto px-4 pt-24 pb-8 flex-grow">
+        <!-- Show all feedback -->
         <div class="py-6">
             <!-- Active Sit-ins List -->
             <div class="md:col-span-2 bg-white rounded-lg border border-gray-300 shadow-md hover:shadow-xl transition-shadow duration-300">
                 <div class="border-b border-gray-200 p-4 flex justify-between items-center">
-                    <h2 class="heading-font text-lg font-semibold text-gray-800">Sit-in Records</h2>
+                    <h2 class="heading-font text-lg font-semibold text-gray-800">Sit-in Feedbacks</h2>
                     <div class="flex space-x-2">
                         <button id="refreshBtn" class="px-3 py-1.5 text-sm bg-gray-100 text-secondary rounded-md hover:bg-gray-200 focus:outline-none transition duration-200 flex items-center">
                             <i class="fas fa-sync-alt mr-1"></i> Refresh
@@ -160,51 +158,22 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                 <tr>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student no</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">laboratory</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Purpose</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Check in date/time</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Check out time</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Firstname</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Lastname</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Middle Name</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Year Level</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Lab</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Feedback</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white divide-y divide-gray-200" id="activeSitInsList">
-                                <!-- Active sit-ins will be listed here -->
-                                <?php if (empty($sit_in_record)): ?>
-                                <tr>
-                                    <td colspan="6" class="px-6 py-4 text-center text-sm text-gray-500">
-                                        No records of sit-ins available.
-                                    </td>
-                                </tr>
-                                <?php else: ?>
-                                    <?php foreach ($sit_in_record as $sit_in): ?>
-                                    <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900"><?php echo htmlspecialchars($sit_in['student_id']); ?></div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900"><?php echo htmlspecialchars($sit_in['laboratory']); ?></div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900"><?php echo htmlspecialchars($sit_in['purpose']); ?></div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900"><?php echo htmlspecialchars($sit_in['check_in_date']); ?></div>
-                                            <div class="text-sm text-gray-900"><?php echo htmlspecialchars($sit_in['check_in_time']); ?></div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900"><?php echo htmlspecialchars($sit_in['check_out_time']); ?></div>
-                                        </td>
-                                    </tr>
-                                    <?php endforeach; ?>
-                                <?php endif; ?>
-                            </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-        </div>
+        </div> 
     </div>
-    
+
     <!-- Footer -->
     <footer class="bg-white border-t border-gray-200 py-4 mt-6">
         <div class="container mx-auto px-4 text-center text-gray-600 text-sm">
@@ -212,36 +181,45 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
             <p class="text-xs mt-1">Developed by Rafael B. Patiño</p>
         </div>
     </footer>
-
-    <script>
-        // Handle sit-in button dropdown
-        const sitInButton = document.querySelector('.dropdown-button');
-        const sitInDropdown = document.querySelector('.dropdown-content');
-
-        sitInButton.addEventListener('click', () => {
-            // Show dropdown
-            sitInDropdown.classList.toggle('hidden');
-        });
-
-        // Close dropdowns when clicking outside
-        document.addEventListener('click', function(event) {
-            if (!sitInButton.contains(event.target) && !sitInDropdown.contains(event.target)) {
-                sitInDropdown.classList.add('hidden');
-            }
-        });
-
-        // Open search modal
-        document.querySelectorAll('.open-search-modal').forEach(button => {
-            button.addEventListener('click', function(e) {
-                e.preventDefault();
-                searchModal.classList.remove('hidden');
-            });
-        });
-        
-        // Refresh button
-        document.getElementById('refreshBtn').addEventListener('click', function() {
-            location.reload();
-        });
-    </script>
 </body>
+<script>
+    //Handle sit-in button dropdown
+    const sitInButton = document.querySelector('.dropdown-button');
+    const sitInDropdown = document.querySelector('.dropdown-content');
+
+    sitInButton.addEventListener('click', () => {
+        //show dropdown
+        sitInDropdown.classList.toggle('hidden');
+    });
+
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(event) {
+        if (!sitInButton.contains(event.target) && !sitInDropdown.contains(event.target)) {
+            sitInDropdown.classList.add('hidden');
+        }
+    });
+
+    // Search modal alert
+    setTimeout(() => {
+        const alertBox = document.getElementById('alert-box');
+        if (alertBox) {
+            alertBox.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+            setTimeout(() => alertBox.remove(), 500);
+        }
+    }, 3000); // Hide after 3 seconds
+
+    // Open search modal
+    document.querySelectorAll('.open-search-modal').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            searchModal.classList.remove('hidden');
+        });
+    });
+
+    // Close search modal
+    document.getElementById('closeSearchModal').addEventListener('click', function() {
+        document.getElementById('searchModal').classList.add('hidden');
+    });
+
+</script>
 </html>

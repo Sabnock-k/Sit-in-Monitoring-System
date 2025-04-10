@@ -141,9 +141,9 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
                     </div>
                     
                     <div class="relative group">
-                        <button class="px-3 py-2 rounded-md transition duration-300 flex items-center text-secondary hover:bg-gray-100">
+                        <a href="feedback.php" class="px-3 py-2 rounded-md transition duration-300 flex items-center text-secondary hover:bg-gray-100">
                             <i class="fas fa-comment-alt mr-2"></i><span>Feedback</span>
-                        </button>
+                        </a>
                     </div>
                     
                     <a href="../../logout.php" class="px-3 py-2 rounded-md transition duration-300 flex items-center text-red-600 hover:bg-red-50">
@@ -255,6 +255,8 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
                     </div>
                 </div>
             </div>
+        </div> 
+    </div>
     
     <!-- Footer -->
     <footer class="bg-white border-t border-gray-200 py-4 mt-6">

@@ -1,64 +1,80 @@
 <?php
 include("../../conn/db.php");
-// Check if user is logged in
 
-if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
-    header("Location: ../../login.php");
-    exit();
-} else if ($_SESSION['username'] !== 'admin') {
+// Centralized authentication check
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true || $_SESSION['username'] !== 'admin') {
     header("Location: ../../login.php");
     exit();
 }
 
-// Get all students
+// Initialize variables
+$error_message = '';
+$success_message = '';
+$studentId = '';
+$student_name = '';
+$student_curse_year = '';
+$laboratory = '';
+$purpose = '';
+
+// Get all students - only if needed for dropdown or display
 $sql = "SELECT * FROM users";
 $result = $conn->query($sql);
 $students = $result->fetch_all(MYSQLI_ASSOC);
 
-// Messages
-$error_message = '';
-$success_message = '';
-
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['registerSitIn'])) {
-    // Sanitize and validate inputs
-    $studentId = $conn->real_escape_string($_POST['studentId'] ?? '');
-    $student_name = $conn->real_escape_string($_POST['studentName'] ?? '');
-    $student_curse_year = $conn->real_escape_string($_POST['studentCourseYear'] ?? '');
-    $laboratory = $conn->real_escape_string($_POST['laboratory'] ?? '');
-    $purpose = $conn->real_escape_string($_POST['purpose'] ?? '');
-    $check_in_date = date('Y-m-d');
-    $check_in_time = date('H:i:s');
-
-    // Validate form inputs
+    // Collect form data
+    $studentId = $_POST['studentId'] ?? '';
+    $student_name = $_POST['studentName'] ?? '';
+    $student_curse_year = $_POST['studentCourseYear'] ?? '';
+    $laboratory = $_POST['laboratory'] ?? '';
+    $purpose = $_POST['purpose'] ?? '';
+    
+    // Validate inputs
     if (empty($studentId) || empty($laboratory) || empty($purpose)) {
         $error_message = "Please fill in all required fields.";
     } else {
-        // Check if student has an ongoing sit-in
-        $check_sql = "SELECT * FROM sit_ins WHERE student_id = '$studentId' AND check_out_time = NULL";
-        $sit_in_check_result = $conn->query($check_sql);
-
-        // Check student if have 0 session left
-        $check_session_sql = "SELECT * FROM users WHERE idno = '$studentId' AND sessionno = 0";
-        $check_session_result = $conn->query($check_session_sql);
-
-        if ($check_session_result->num_rows > 0) {
-            $error_message = "This student has no session left.";
-        } elseif ($sit_in_check_result->num_rows > 0) {
-            $error_message = "This student has student has an ongoing sit-in. Please check out the student first.";
-        } else {
-            // Insert into database
-            $sql = "INSERT INTO sit_ins (student_id, laboratory, purpose, check_in_date, check_in_time) 
-                    VALUES ('$studentId', '$laboratory', '$purpose', '$check_in_date', '$check_in_time')";
+        // Use prepared statements for better security
+        $stmt = $conn->prepare("SELECT sessionno FROM users WHERE idno = ?");
+        $stmt->bind_param("s", $studentId);
+        $stmt->execute();
+        $session_result = $stmt->get_result();
+        $stmt->close();
+        
+        if ($session_result->num_rows > 0) {
+            $user_data = $session_result->fetch_assoc();
             
-            if ($conn->query($sql)) {
-                $success_message = "Student sit-in registered successfully!";
-                // Wait for a few sec and reload the this page
-                header("Refresh: 1");
-                exit();
+            if ($user_data['sessionno'] <= 0) {
+                $error_message = "This student has no session left.";
             } else {
-                $error_message = "Error registering sit-in: " . $conn->error;
+                // Check for ongoing sit-in
+                $stmt = $conn->prepare("SELECT student_id FROM sit_ins WHERE student_id = ? AND check_out_time IS NULL");
+                $stmt->bind_param("s", $studentId);
+                $stmt->execute();
+                $ongoing_result = $stmt->get_result();
+                $stmt->close();
+                
+                if ($ongoing_result->num_rows > 0) {
+                    $error_message = "This student has an ongoing sit-in. Please check out the student first.";
+                } else {
+                    // Insert new sit-in record
+                    $check_in_date = date('Y-m-d');
+                    $check_in_time = date('H:i:s');
+                    
+                    $stmt = $conn->prepare("INSERT INTO sit_ins (student_id, laboratory, purpose, check_in_date, check_in_time) 
+                            VALUES (?, ?, ?, ?, ?)");
+                    $stmt->bind_param("sssss", $studentId, $laboratory, $purpose, $check_in_date, $check_in_time);
+                    
+                    if ($stmt->execute()) {
+                        $success_message = "Student sit-in registered successfully!";
+                    } else {
+                        $error_message = "Error registering sit-in: " . $stmt->error;
+                    }
+                    $stmt->close();
+                }
             }
+        } else {
+            $error_message = "Student not found.";
         }
     }
 }
@@ -107,18 +123,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['registerSitIn'])) {
                 <!-- Student Information (Read-only) -->
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2">Student ID:</label>
-                    <input type="text" id="studentIdDisplay" class="bg-gray-100 p-2 w-full rounded border border-gray-300 mb-2" readonly value="<?= isset($studentId) ? htmlspecialchars($studentId) : '' ?>">
-                    <input type="hidden" id="studentId" name="studentId" value="<?= htmlspecialchars($studentId ?? '') ?>" value="<?= isset($studentId) ? htmlspecialchars($studentId) : '' ?>">
+                    <input type="text" id="studentIdDisplay" class="bg-gray-100 p-2 w-full rounded border border-gray-300 mb-2" readonly value="<?= htmlspecialchars($studentId) ?>">
+                    <input type="hidden" id="studentId" name="studentId" value="<?= htmlspecialchars($studentId) ?>">
                 </div>
                 
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2">Student Name:</label>
-                    <input type="text" id="studentName" name="studentName" class="bg-gray-100 p-2 w-full rounded border border-gray-300 mb-2" readonly value="<?= isset($student_name) ? htmlspecialchars($student_name) : '' ?>">
+                    <input type="text" id="studentName" name="studentName" class="bg-gray-100 p-2 w-full rounded border border-gray-300 mb-2" readonly value="<?= htmlspecialchars($student_name) ?>">
                 </div>
                 
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2">Course & Year:</label>
-                    <input type="text" id="studentCourseYear" name="studentCourseYear" class="bg-gray-100 p-2 w-full rounded border border-gray-300 mb-2" readonly value="<?= isset($student_curse_year) ? htmlspecialchars($student_curse_year) : '' ?>">
+                    <input type="text" id="studentCourseYear" name="studentCourseYear" class="bg-gray-100 p-2 w-full rounded border border-gray-300 mb-2" readonly value="<?= htmlspecialchars($student_curse_year) ?>">
                 </div>
                 
                 <!-- Laboratory Selection -->
@@ -126,11 +142,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['registerSitIn'])) {
                     <label for="laboratory" class="block text-gray-700 text-sm font-bold mb-2">Laboratory:</label>
                     <select id="laboratory" name="laboratory" class="p-2 w-full rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
                         <option value="">Select Laboratory</option>
-                        <option value="524" <?= (isset($laboratory) && $laboratory == '524') ? 'selected' : '' ?>>Laboratory 524</option>
-                        <option value="526" <?= (isset($laboratory) && $laboratory == '526') ? 'selected' : '' ?>>Laboratory 526</option>
-                        <option value="528" <?= (isset($laboratory) && $laboratory == '528') ? 'selected' : '' ?>>Laboratory 528</option>
-                        <option value="530" <?= (isset($laboratory) && $laboratory == '530') ? 'selected' : '' ?>>Laboratory 530</option>
-                        <option value="542" <?= (isset($laboratory) && $laboratory == '542') ? 'selected' : '' ?>>Laboratory 542</option>
+                        <option value="524" <?= ($laboratory == '524') ? 'selected' : '' ?>>Laboratory 524</option>
+                        <option value="526" <?= ($laboratory == '526') ? 'selected' : '' ?>>Laboratory 526</option>
+                        <option value="528" <?= ($laboratory == '528') ? 'selected' : '' ?>>Laboratory 528</option>
+                        <option value="530" <?= ($laboratory == '530') ? 'selected' : '' ?>>Laboratory 530</option>
+                        <option value="542" <?= ($laboratory == '542') ? 'selected' : '' ?>>Laboratory 542</option>
                     </select>
                 </div>
                 
@@ -139,11 +155,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['registerSitIn'])) {
                     <label for="purpose" class="block text-gray-700 text-sm font-bold mb-2">Purpose:</label>
                     <select id="purpose" name="purpose" class="p-2 w-full rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
                         <option value="">Select Purpose</option>
-                        <option value="C# Programming" <?= (isset($purpose) && $purpose == 'C# Programming') ? 'selected' : '' ?>>C# Programming</option>
-                        <option value="C Programming" <?= (isset($purpose) && $purpose == 'C Programming') ? 'selected' : '' ?>>C Programming</option>
-                        <option value="Java Programming" <?= (isset($purpose) && $purpose == 'Java Programming') ? 'selected' : '' ?>>Java Programming</option>
-                        <option value="ASP.Net Programming" <?= (isset($purpose) && $purpose == 'ASP.Net Programming') ? 'selected' : '' ?>>ASP.Net Programming</option>
-                        <option value="PHP Programming" <?= (isset($purpose) && $purpose == 'PHP Programming') ? 'selected' : '' ?>>PHP Programming</option>
+                        <option value="C# Programming" <?= ($purpose == 'C# Programming') ? 'selected' : '' ?>>C# Programming</option>
+                        <option value="C Programming" <?= ($purpose == 'C Programming') ? 'selected' : '' ?>>C Programming</option>
+                        <option value="Java Programming" <?= ($purpose == 'Java Programming') ? 'selected' : '' ?>>Java Programming</option>
+                        <option value="ASP.Net Programming" <?= ($purpose == 'ASP.Net Programming') ? 'selected' : '' ?>>ASP.Net Programming</option>
+                        <option value="PHP Programming" <?= ($purpose == 'PHP Programming') ? 'selected' : '' ?>>PHP Programming</option>
                     </select>
                 </div>
                 
@@ -157,12 +173,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['registerSitIn'])) {
         </div>
     </div>
 </div>
+
 <script>
 // Close modal
 document.getElementById('closeSitInModal').addEventListener('click', function() {
     document.getElementById('sitInModal').classList.add('hidden');
     // Reload the search.php page to reset the form
-    location.href = location.href;
+    window.location.href = window.location.href;
 });
 
 // Ensure modal remains open if a message exists

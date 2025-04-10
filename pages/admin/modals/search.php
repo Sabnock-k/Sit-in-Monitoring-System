@@ -128,16 +128,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['searchQuery'])) {
 </div>
 
 <script>
-// Open search modal with reset
-document.querySelectorAll('.open-search-modal').forEach(button => {
-    button.addEventListener('click', function() {
-        // Reset the form and search results
-        document.getElementById('studentSearch').value = '';
-        document.getElementById('searchResults').innerHTML = '<div class="bg-blue-50 p-4 rounded-md text-center"><p class="text-blue-700"><i class="fas fa-search mr-2"></i>Search for students by ID, name, or course</p></div>';
-        document.getElementById('searchModal').classList.remove('hidden');
-    });
-});
-
 // Submit form without page reload using AJAX
 document.getElementById('searchForm').addEventListener('submit', function(e) {
     e.preventDefault();

@@ -3,6 +3,7 @@ session_start();
 include('../../conn/db.php');
 include('modals/search.php');
 include('modals/edit-student.php');
+include('modals/delete-student-modal.php');
 
 // Check if user is logged in
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
@@ -224,11 +225,20 @@ $list_of_students = $result->fetch_all(MYSQLI_ASSOC);
                                             <!-- put them side by side -->
                                             <div class="flex space-x-2">
                                                 <div class="text-sm text-gray-900">
-                                                    <button class="px-2 py-1 text-sm bg-gray-100 text-secondary rounded-md hover:bg-gray-200 focus:outline-none transition duration-200 flex items-center">Edit</button>
+                                                    <button class="edit_studentBtn px-2 py-1 text-sm bg-gray-100 text-secondary rounded-md hover:bg-gray-200 focus:outline-none transition duration-200 flex items-center"
+                                                    student_idno="<?php echo htmlspecialchars($student['idno']); ?>"
+                                                    student_firstname="<?php echo htmlspecialchars($student['firstname']); ?>"
+                                                    student_lastname="<?php echo htmlspecialchars($student['lastname']); ?>"
+                                                    student_midname="<?php echo htmlspecialchars($student['midname']); ?>"
+                                                    student_course="<?php echo htmlspecialchars($student['course']); ?>"
+                                                    student_year_level="<?php echo htmlspecialchars($student['year_level']); ?>"
+                                                    >Edit</button>
                                                 </div>
-                                                <div class="text-sm text-gray-900">
-                                                    <button class="px-2 py-1 text-sm bg-gray-100 text-secondary rounded-md hover:bg-gray-200 focus:outline-none transition duration-200 flex items-center">Delete</button>
-                                                </div>
+                                                <button class="delete_studentBtn px-2 py-1 text-sm bg-red-100 text-red-600 rounded-md hover:bg-red-200 focus:outline-none transition duration-200 flex items-center"
+                                                    data-student-name="<?php echo htmlspecialchars($student['firstname'] . ' ' . $student['lastname']); ?>"
+                                                    data-student-id="<?php echo htmlspecialchars($student['idno']); ?>">
+                                                    <i class="fas fa-trash-alt mr-1"></i> Delete
+                                                </button>
                                                 <div class="text-sm text-gray-900">
                                                     <button class="px-2 py-1 text-sm bg-gray-100 text-secondary rounded-md hover:bg-gray-200 focus:outline-none transition duration-200 flex items-center">Reset</button>
                                                 </div>
@@ -307,12 +317,123 @@ $list_of_students = $result->fetch_all(MYSQLI_ASSOC);
             });
         });
 
-        // Open edit student modal
-        document.querySelectorAll('.open-edit-student-modal').forEach(button => {
-            button.addEventListener('click', function(e) {
+        // Handle edit student button
+        const student_editBtn = document.querySelectorAll('.edit_studentBtn');
+        const EditStudentModal = document.getElementById('EditStudentModal');
+        const closeModal = document.getElementById('closeEditStudentModal');
+        
+        student_editBtn.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Get the data from the button
+                const student_idno = btn.getAttribute('student_idno');
+                const student_firstname = btn.getAttribute('student_firstname');
+                const student_lastname = btn.getAttribute('student_lastname');
+                const student_middlename = btn.getAttribute('student_midname');
+                const student_course = btn.getAttribute('student_course');
+                const student_year_level = btn.getAttribute('student_year_level');
+
+                // Set the values in the form
+                document.getElementById('studentIdDisplay').value = student_idno;
+                document.getElementById('firstName').value = student_firstname;
+                document.getElementById('lastName').value = student_lastname;
+                document.getElementById('middleName').value = student_middlename;
+                document.getElementById('course').value = student_course;
+                document.getElementById('yearLevel').value = student_year_level;
+                
+                // Show the modal
                 EditStudentModal.classList.remove('hidden');
             });
         });
+        
+        // Close edit student modal
+        closeModal.addEventListener('click', () => {
+            EditStudentModal.classList.add('hidden');
+        });
+
+        const cancelDeleteStudent = document.getElementById('cancelDeleteStudent');
+        const deleteStudentBtns = document.querySelectorAll('.delete_studentBtn');
+        const deleteStudentModal = document.getElementById('deleteStudentModal');
+        const closeDeleteStudentModal = document.getElementById('closeDeleteStudentModal');
+        const confirmDeleteStudent = document.getElementById('confirmDeleteStudent');
+        const studentNameToDelete = document.getElementById('studentNameToDelete');
+        const studentIdToDelete = document.getElementById('studentIdToDelete');
+        let currentStudentId = null;
+
+        // Open delete confirmation modal
+        deleteStudentBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const studentId = btn.getAttribute('data-student-id');
+                const studentName = btn.getAttribute('data-student-name');
+                
+                // Set the values
+                currentStudentId = studentId;
+                studentNameToDelete.textContent = studentName;
+                studentIdNoToDelete.textContent = studentId;
+                studentIdToDelete.value = studentId;
+                
+                // Show the modal
+                deleteStudentModal.classList.remove('hidden');
+            });
+        });
+
+
+        // Close delete modal
+        closeDeleteStudentModal.addEventListener('click', () => {
+            deleteStudentModal.classList.add('hidden');
+            currentStudentId = null;
+        });
+
+        // Handle delete confirmation
+        confirmDeleteStudent.addEventListener('click', () => {
+            if (currentStudentId) {
+                // Create form data
+                const formData = new FormData();
+                formData.append('student_id', currentStudentId);
+                
+                // Send delete request
+                fetch('actions/delete-student.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    // Check if response is valid JSON
+                    const contentType = response.headers.get('content-type');
+                    if (contentType && contentType.includes('application/json')) {
+                        return response.json();
+                    } else {
+                        // If not JSON, get the text and throw an error
+                        return response.text().then(text => {
+                            throw new Error('Received non-JSON response: ' + text);
+                        });
+                    }
+                })
+                .then(data => {
+                    if (data.success) {
+                        // Reload the page to show updated list
+                        window.location.reload();
+                    } else {
+                        alert('Error: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while deleting the student: ' + error.message);
+                })
+                .finally(() => {
+                    // Close the modal
+                    deleteStudentModal.classList.add('hidden');
+                    currentStudentId = null;
+                });
+            }
+        });
+
+
+        // Cancel delete
+        cancelDeleteStudent.addEventListener('click', () => {
+            deleteStudentModal.classList.add('hidden');
+            currentStudentId = null;
+        });
+
         
         // Refresh button
         document.getElementById('refreshBtn').addEventListener('click', function() {

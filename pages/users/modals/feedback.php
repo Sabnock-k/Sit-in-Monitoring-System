@@ -4,10 +4,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit_feedback'])) {
     $rating = $_POST['rating'];
     $feedback_text = $_POST['feedback_text'];
     $user_id = $_SESSION['idno'];
+    $checkin_date = isset($_POST['checkin_date']) ? $_POST['checkin_date'] : null;
+    $checkin_time = isset($_POST['checkin_time']) ? $_POST['checkin_time'] : null;
     
     // Use prepared statement to prevent SQL injection
-    $insert_feedback = $conn->prepare("UPDATE sit_ins SET rating = ?, feedback = ? WHERE student_id = ? AND rating IS NULL AND feedback IS NULL");
-    $insert_feedback->bind_param("iss", $rating, $feedback_text, $user_id);
+    $insert_feedback = $conn->prepare("UPDATE sit_ins SET rating = ?, feedback = ? WHERE student_id = ? AND check_in_date = ? AND check_in_time = ? AND rating IS NULL AND feedback IS NULL");
+    $insert_feedback->bind_param("issss", $rating, $feedback_text, $user_id, $checkin_date, $checkin_time);
     
     if ($insert_feedback->execute()) {
         $feedback_message = "Feedback submitted successfully!";
@@ -32,6 +34,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit_feedback'])) {
             </button>
         </div>
         <form id="feedbackForm" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+            <input type="hidden" id="checkin_date" name="checkin_date" value="">
+            <input type="hidden" id="checkin_time" name="checkin_time" value="">
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700 mb-2">How was your experience?</label>
             </div>

@@ -113,37 +113,6 @@ $sit_in_record = $conn->query($sql);
         </div>
     </nav>
 
-    <!-- Mobile menu - Hidden by default -->
-    <div class="fixed inset-0 z-40 bg-black bg-opacity-25 transform transition-opacity duration-300 opacity-0 pointer-events-none md:hidden" id="mobile-menu-overlay">
-        <div class="absolute right-0 top-0 h-full w-64 bg-white shadow-lg transform transition-transform duration-300 translate-x-full">
-            <div class="p-4 border-b border-gray-200">
-                <div class="flex items-center justify-between">
-                    <span class="heading-font font-semibold text-primary">Menu</span>
-                    <button type="button" class="text-gray-500 hover:text-gray-600 focus:outline-none" id="close-mobile-menu">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-            </div>
-            <div class="py-2">
-                <a href="homepage.php" class="block px-4 py-2 text-secondary hover:bg-gray-100">
-                    <i class="fas fa-home mr-2"></i> Dashboard
-                </a>
-                <a href="edit-profile.php" class="block px-4 py-2 text-secondary hover:bg-gray-100">
-                    <i class="fas fa-user-edit mr-2"></i> Profile
-                </a>
-                <a href="history.php" class="block px-4 py-2 text-primary bg-blue-50">
-                    <i class="fas fa-history mr-2"></i> History
-                </a>
-                <a href="reservation.php" class="block px-4 py-2 text-secondary hover:bg-gray-100">
-                    <i class="fas fa-calendar-plus mr-2"></i> Reserve
-                </a>
-                <a href="../../logout.php" class="block px-4 py-2 text-red-600 hover:bg-red-50">
-                    <i class="fas fa-sign-out-alt mr-2"></i> Log Out
-                </a>
-            </div>
-        </div>
-    </div>
-
     <!-- Main Content -->
     <div class="container mx-auto px-4 pt-24 pb-8 flex-grow">
         <div class="">
@@ -212,8 +181,9 @@ $sit_in_record = $conn->query($sql);
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <?php if (!empty($sit_in['check_out_time']) && empty($sit_in['feedback'])): ?>
-                                                <button 
-                                                    class="feedback-btn px-3 py-1.5 text-sm bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200 focus:outline-none transition duration-200 flex items-center">
+                                                <button class="feedback-btn px-3 py-1.5 text-sm bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200 focus:outline-none transition duration-200 flex items-center"
+                                                    data-checkin-date="<?php echo $sit_in['check_in_date']; ?>"
+                                                    data-checkin-time="<?php echo $sit_in['check_in_time']; ?>">
                                                     <i class="fas fa-comment mr-1"></i> Add Feedback
                                                 </button>
                                             <?php elseif (!empty($sit_in['feedback'])): ?>
@@ -273,13 +243,22 @@ $sit_in_record = $conn->query($sql);
         }
         
         // Handle feedback modal
-        const feedbackBtns = document.querySelectorAll('.feedback-btn');
+        const feedbackBtn = document.querySelectorAll('.feedback-btn');
         const feedbackModal = document.getElementById('feedbackModal');
         const closeModal = document.getElementById('closeModal');
         const cancelBtn = document.getElementById('cancelBtn');
         
-        feedbackBtns.forEach(btn => {
+        feedbackBtn.forEach(btn => {
             btn.addEventListener('click', () => {
+                // Get the data from the button
+                const checkinDate = btn.getAttribute('data-checkin-date');
+                const checkinTime = btn.getAttribute('data-checkin-time');
+                
+                // Set the values in the form
+                document.getElementById('checkin_date').value = checkinDate;
+                document.getElementById('checkin_time').value = checkinTime;
+                
+                // Show the modal
                 feedbackModal.classList.remove('hidden');
             });
         });

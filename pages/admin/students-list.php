@@ -27,7 +27,7 @@ $total_pages = ceil($total_records / $records_per_page);
 // Get records with pagination
 $sql = "SELECT idno, lastname, firstname, midname, course, year_level, sessionno FROM users LIMIT $offset, $records_per_page";
 $result = $conn->query($sql);
-$sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
+$list_of_students = $result->fetch_all(MYSQLI_ASSOC);
 ?>
 
 
@@ -193,32 +193,32 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200" id="activeSitInsList">
                                 <!-- Active sit-ins will be listed here -->
-                                <?php if (empty($sit_in_record)): ?>
+                                <?php if (empty($list_of_students)): ?>
                                 <tr>
                                     <td colspan="6" class="px-6 py-4 text-center text-sm text-gray-500">
                                         No records of sit-ins available.
                                     </td>
                                 </tr>
                                 <?php else: ?>
-                                    <?php foreach ($sit_in_record as $sit_in): ?>
+                                    <?php foreach ($list_of_students as $student): ?>
                                     <tr>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900"><?php echo htmlspecialchars($sit_in['firstname']); ?></div>
+                                            <div class="text-sm text-gray-900"><?php echo htmlspecialchars($student['firstname']); ?></div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900"><?php echo htmlspecialchars($sit_in['lastname']); ?></div>
+                                            <div class="text-sm text-gray-900"><?php echo htmlspecialchars($student['lastname']); ?></div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900"><?php echo htmlspecialchars($sit_in['midname']); ?></div>
+                                            <div class="text-sm text-gray-900"><?php echo htmlspecialchars($student['midname']); ?></div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900"><?php echo htmlspecialchars($sit_in['course']); ?></div>
+                                            <div class="text-sm text-gray-900"><?php echo htmlspecialchars($student['course']); ?></div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900"><?php echo htmlspecialchars($sit_in['year_level']); ?></div>
+                                            <div class="text-sm text-gray-900"><?php echo htmlspecialchars($student['year_level']); ?></div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900"><?php echo htmlspecialchars($sit_in['sessionno']); ?></div>
+                                            <div class="text-sm text-gray-900"><?php echo htmlspecialchars($student['sessionno']); ?></div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <!-- put them side by side -->

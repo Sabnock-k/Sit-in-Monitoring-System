@@ -73,7 +73,7 @@ CREATE TABLE `users` (
   `firstname` varchar(100) NOT NULL,
   `midname` varchar(100) DEFAULT NULL,
   `course` enum('Computer Science','Information Technology') NOT NULL,
-  `year_level` enum('First year','Second year','Third year','Fourth year') NOT NULL,
+  `year_level` enum('1st Year','2nd Year','3rd Year','4th Year') NOT NULL,
   `email` varchar(255) NOT NULL,
   `address` varchar(255) NOT NULL,
   `username` varchar(50) NOT NULL,

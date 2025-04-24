@@ -223,25 +223,6 @@ $sit_in_record = $conn->query($sql);
     </footer>
 
     <script>
-        // Handle mobile menu toggle
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
-        const closeMobileMenu = document.getElementById('close-mobile-menu');
-        
-        if (mobileMenuButton && mobileMenuOverlay && closeMobileMenu) {
-            mobileMenuButton.addEventListener('click', () => {
-                mobileMenuOverlay.classList.toggle('opacity-0');
-                mobileMenuOverlay.classList.toggle('pointer-events-none');
-                mobileMenuOverlay.querySelector('div').classList.toggle('translate-x-full');
-            });
-            
-            closeMobileMenu.addEventListener('click', () => {
-                mobileMenuOverlay.classList.add('opacity-0');
-                mobileMenuOverlay.classList.add('pointer-events-none');
-                mobileMenuOverlay.querySelector('div').classList.add('translate-x-full');
-            });
-        }
-        
         // Handle feedback modal
         const feedbackBtn = document.querySelectorAll('.feedback-btn');
         const feedbackModal = document.getElementById('feedbackModal');

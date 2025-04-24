@@ -161,7 +161,7 @@ $sit_in_record = $result->fetch_all(MYSQLI_ASSOC);
             <!-- Active Sit-ins List -->
             <div class="md:col-span-2 bg-white rounded-lg border border-gray-300 shadow-md hover:shadow-xl transition-shadow duration-300">
                 <div class="border-b border-gray-200 p-4 flex justify-between items-center">
-                    <h2 class="heading-font text-lg font-semibold text-gray-800">Sit-in Records</h2>
+                    <h2 class="heading-font text-lg font-semibold text-gray-800">List of Students</h2>
                     <div class="flex space-x-2">
                         <div class="flex items-center">
                             <label for="recordsPerPage" class="text-sm text-gray-600 mr-2">Show:</label>
